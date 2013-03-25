@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
@@ -114,6 +115,7 @@ public class MainActivity extends Activity {
 		@Override
 		public void onLocationChanged(Location location) {
 
+			Log.d("worldrpg", String.valueOf(location.getLatitude()) +  location.getLongitude());
 			LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 			mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 

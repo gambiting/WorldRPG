@@ -1,5 +1,7 @@
 package b0538705.ncl.worldrpg;
 
+import org.yaml.snakeyaml.Yaml;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
@@ -46,6 +48,14 @@ public class MainActivity extends Activity {
 		//Remove notification bar
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+		
+		/*
+		 * yaml experimentation
+		 */
+		
+		Yaml yaml = new Yaml();
+		
+		/*
 		setContentView(R.layout.camera_view);
 		FrameLayout arViewPane = (FrameLayout) findViewById(R.id.ar_view_pane); 
 
@@ -54,9 +64,9 @@ public class MainActivity extends Activity {
 		
 		OverlayView arContent = new OverlayView(getApplicationContext()); 
 		arViewPane.addView(arContent); 
+		*/
 
-
-		/*
+		
 		setContentView(R.layout.activity_main);
 
 
@@ -86,7 +96,7 @@ public class MainActivity extends Activity {
 		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new myLocationListener());
-		 */
+		 
 
 
 	}

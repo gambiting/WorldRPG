@@ -97,8 +97,6 @@ public class MainActivity extends Activity {
 
 
 		marker = mMap.addMarker(mr);
-		
-		Player.instance = new Player();
 
 		playerMarkerOptions = new MarkerOptions().icon(playerImage);
 		playerMarkerOptions.position(new LatLng(0, 0));

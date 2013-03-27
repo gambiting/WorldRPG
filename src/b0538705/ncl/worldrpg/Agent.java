@@ -1,12 +1,10 @@
 package b0538705.ncl.worldrpg;
 
-import java.util.ArrayList;
-
-import android.location.Location;
+import com.google.android.gms.maps.model.LatLng;
 
 public class Agent {
 	
-	public Location position;
+	public LatLng position;
 	
 	public ArrayList<ActionPackage> actionStack;
 	
@@ -17,12 +15,12 @@ public class Agent {
 	
 	public double getLatitude()
 	{
-		return position.getLatitude();
+		return position.latitude;
 	}
 	
 	public double getLongtitude()
 	{
-		return position.getLongitude();
+		return position.longitude;
 	}
 	
 

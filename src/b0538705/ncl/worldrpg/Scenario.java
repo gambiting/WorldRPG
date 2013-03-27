@@ -11,6 +11,23 @@ public class Scenario {
 	public Scenario()
 	{
 		activeAgents = new ArrayList<Agent>();
+		
+		
+		/*
+		 * at this point, the scenario should load an appropriate yaml file with scenario details
+		 * not right now though
+		 */
+		
+		createAgents();
+	}
+	
+	private void createAgents()
+	{
+		for(int i=0;i<10;i++)
+		{
+			Agent tempAgent = new Agent();
+			//tempAgent.position
+		}
 	}
 
 }

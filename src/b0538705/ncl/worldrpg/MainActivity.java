@@ -1,6 +1,11 @@
 package b0538705.ncl.worldrpg;
 
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Construct;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -55,6 +60,13 @@ public class MainActivity extends Activity {
 		 */
 		
 		Yaml yaml = new Yaml();
+		String document = "\n- Hesperiidae\n- Papilionidae\n- Apatelodidae\n- Epiplemidae";
+		InputStream basicScenarioStream = getResources().openRawResource(R.raw.basic);
+		@SuppressWarnings("unchecked")
+		Map<String, Object> object = (Map<String, Object>) yaml.load(basicScenarioStream);
+		
+		
+		Log.d("worldrpg", object.toString());
 		
 		/*
 		setContentView(R.layout.camera_view);
@@ -77,7 +89,7 @@ public class MainActivity extends Activity {
 
 		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 
-		mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+		mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
 		mMap.setOnMapClickListener(new myMapListener());
 
@@ -96,9 +108,12 @@ public class MainActivity extends Activity {
 
 		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new myLocationListener());
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new myLocationListener());
 		 
+		//Location startingLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
+		//LatLng latLng = new LatLng(startingLocation.getLatitude(), startingLocation.getLongitude());
+		//mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
 	}
 
@@ -115,7 +130,7 @@ public class MainActivity extends Activity {
 		@Override
 		public void onLocationChanged(Location location) {
 
-			Log.d("worldrpg", String.valueOf(location.getLatitude()) +  location.getLongitude());
+			//Log.d("worldrpg", String.valueOf(location.getLatitude()) + " ; " +  String.valueOf(location.getLongitude()));
 			LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 			mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 

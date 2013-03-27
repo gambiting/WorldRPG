@@ -8,6 +8,6 @@
     map:uiRotateGestures="false"
     map:uiScrollGestures="false"
     map:uiZoomControls="false"
-    map:uiZoomGestures="false" 
-    map:cameraZoom="15"
+    map:uiZoomGestures="true" 
+    map:cameraZoom="18"
     />

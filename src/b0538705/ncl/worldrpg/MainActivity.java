@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
 		Map<String, Object> object = (Map<String, Object>) yaml.load(basicScenarioStream);
 		
 		
-		Log.d("worldrpg", object.toString());
+		//Log.d("worldrpg", object.toString());
 		
 		/*
 		setContentView(R.layout.camera_view);
@@ -98,6 +98,10 @@ public class MainActivity extends Activity {
 
 		marker = mMap.addMarker(mr);
 
+		Player.instance = new Player();
+		//Player.instance.position.latitude = 
+		
+		
 		playerMarkerOptions = new MarkerOptions().icon(playerImage);
 		playerMarkerOptions.position(new LatLng(0, 0));
 		playerMarker = mMap.addMarker(playerMarkerOptions);
@@ -114,6 +118,9 @@ public class MainActivity extends Activity {
 
 		//LatLng latLng = new LatLng(startingLocation.getLatitude(), startingLocation.getLongitude());
 		//mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+		
+		
+		Support.initializeThreads();
 
 	}
 

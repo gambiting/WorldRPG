@@ -9,7 +9,7 @@ public class Scenario  {
 	public ArrayList<Agent> activeAgents;
 	
 	//initial number of agents:
-	public int initialNumberOfAgents = 50;
+	public int initialNumberOfAgents = 20;
 	
 	public Scenario()
 	{

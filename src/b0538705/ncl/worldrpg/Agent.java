@@ -9,6 +9,7 @@ import java.util.Observer;
 import android.os.Handler;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -28,6 +29,8 @@ public class Agent implements Observer {
 	public boolean changed=false;
 	
 	
+	private int currentSprite;
+	
 	
 	public Agent(int ID)
 	{
@@ -43,7 +46,7 @@ public class Agent implements Observer {
 		tempPackage.methodsToRun.add(new ActionMethod("moveAbout", null));
 		activeActionPackage = tempPackage;
 		
-		
+		currentSprite = (int)(Math.random()*3.5);
 		
 		//add itself as an observer
 		Support.agentsNotifier.addObserver(this);
@@ -83,17 +86,32 @@ public class Agent implements Observer {
 	//run ONLY from main thread, never call directly
 	public void updateMarkerOnMap()
 	{
-		if(marker==null)
+		if(marker!=null)
 		{
-			markerOptions = new MarkerOptions().position(this.position);
-			marker = MapHandler.mMap.addMarker(markerOptions);
-		}else
-		{
-			marker.remove();
-			markerOptions = new MarkerOptions().position(this.position);
-			marker = MapHandler.mMap.addMarker(markerOptions);
-			
+			marker.remove();	
 		}
+		
+		markerOptions = new MarkerOptions().position(this.position);
+		
+		switch(currentSprite)
+		{
+		case 1:
+			markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.npc_1_1));
+			break;
+		case 2:
+			markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.npc_1_2));
+			break;
+		case 3:
+			markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.npc_1_3));
+			break;
+		}
+		
+		currentSprite++;
+		currentSprite = currentSprite%3 + 1;
+		
+		
+		marker = MapHandler.mMap.addMarker(markerOptions);
+		
 	}
 	
 	public double getLatitude()

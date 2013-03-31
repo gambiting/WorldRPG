@@ -17,7 +17,7 @@ public class Support {
 	
 	
 	//update frequency in seconds
-	public static int agentsUpdateFrequency=200;
+	public static int agentsUpdateFrequency=1000;
 	
 	public static LatLng locationToLatLng(Location l)
 	{

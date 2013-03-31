@@ -7,8 +7,11 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Support {
 	
+	public static String PACKAGE_NAME;
+	
 	public static AgentsNotifier agentsNotifier;
 	public static Scenario activeScenario;
+	
 	
 	//update frequency in seconds
 	public static int agentsUpdateFrequency=1000;

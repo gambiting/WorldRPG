@@ -47,6 +47,8 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Support.PACKAGE_NAME = getApplicationContext().getPackageName();
 
 		//Remove title bar
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);

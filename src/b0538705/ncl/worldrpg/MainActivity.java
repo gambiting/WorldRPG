@@ -7,6 +7,7 @@ import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Construct;
 
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
@@ -21,9 +22,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.Menu;
 import android.view.Window;
@@ -43,12 +47,16 @@ public class MainActivity extends Activity {
 	private Marker playerMarker;
 
 	private BitmapDescriptor playerImage;
+	
+	public static Handler mainHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		Support.PACKAGE_NAME = getApplicationContext().getPackageName();
+		
+		Support.currentContext = getApplicationContext();
 
 		//Remove title bar
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -83,30 +91,23 @@ public class MainActivity extends Activity {
 
 		
 		setContentView(R.layout.activity_main);
-
-
+		Player.instance = new Player();
+		MapHandler.initMap(this);
 
 		playerImage = BitmapDescriptorFactory.fromResource(R.drawable.player);
-
-
-		mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-
-		mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-		mMap.setOnMapClickListener(new myMapListener());
 
 		mr = new MarkerOptions().position(new LatLng(0, 0));
 
 
-		marker = mMap.addMarker(mr);
+		marker = MapHandler.mMap.addMarker(mr);
 
-		Player.instance = new Player();
+		
 		//Player.instance.position.latitude = 
 		
 		
 		playerMarkerOptions = new MarkerOptions().icon(playerImage);
 		playerMarkerOptions.position(new LatLng(0, 0));
-		playerMarker = mMap.addMarker(playerMarkerOptions);
+		playerMarker = MapHandler.mMap.addMarker(playerMarkerOptions);
 
 
 
@@ -122,7 +123,17 @@ public class MainActivity extends Activity {
 		//mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 		
 		
-		Support.initializeThreads();
+		
+		
+		Toast.makeText(Support.currentContext, "Obtaining location, please wait", Toast.LENGTH_LONG).show();
+		
+		MainActivity.mainHandler = new Handler(){
+			  @Override
+			  public void handleMessage(Message msg ) 
+			  {
+				  // this handler will just run whatever comes its way, so it's fine
+			  }
+			};
 
 	}
 
@@ -141,11 +152,21 @@ public class MainActivity extends Activity {
 
 			//Log.d("worldrpg", String.valueOf(location.getLatitude()) + " ; " +  String.valueOf(location.getLongitude()));
 			LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-			mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+			MapHandler.mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+			
+			Player.instance.position = latLng;
 
 			playerMarker.remove();
 			playerMarkerOptions.position(latLng);
-			playerMarker = mMap.addMarker(playerMarkerOptions);
+			playerMarker = MapHandler.mMap.addMarker(playerMarkerOptions);
+			
+			
+			//need a way to check whatever the game is running yet or not
+			//there is room for improvement here
+			if(Support.activeScenario==null)
+			{
+				Support.initializeThreads();
+			}
 
 		}
 
@@ -169,20 +190,6 @@ public class MainActivity extends Activity {
 
 	}
 
-	private class myMapListener implements OnMapClickListener
-	{
-
-		@Override
-		public void onMapClick(LatLng point) {
-			//Toast.makeText(getApplicationContext(), "You clicked on: " + point.latitude + "; " + point.longitude, Toast.LENGTH_LONG).show();
-
-			marker.remove();
-			mr.position(new LatLng(point.latitude, point.longitude));
-			mr.icon(playerImage);
-			marker = mMap.addMarker(mr);
-
-		}
-
-	}
+	
 
 }

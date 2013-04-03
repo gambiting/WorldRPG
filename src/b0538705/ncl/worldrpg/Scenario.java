@@ -17,7 +17,9 @@ public class Scenario  {
 		
 		for(int i=0;i<initialNumberOfAgents;i++)
 		{
-			activeAgents.add(new Agent(i));
+			Agent tempAgent = new Agent(i);
+			tempAgent.useSprites(Agent.animationSprites1);
+			activeAgents.add(tempAgent);
 		}
 	}
 

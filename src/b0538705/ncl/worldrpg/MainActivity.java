@@ -57,6 +57,10 @@ public class MainActivity extends Activity {
 		Support.PACKAGE_NAME = getApplicationContext().getPackageName();
 		
 		Support.currentContext = getApplicationContext();
+		
+		
+		Support.initializeGeneral();
+		
 
 		//Remove title bar
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -93,6 +97,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		Player.instance = new Player();
 		MapHandler.initMap(this);
+		Support.initializeAssets();
 
 		playerImage = BitmapDescriptorFactory.fromResource(R.drawable.player);
 
@@ -127,6 +132,10 @@ public class MainActivity extends Activity {
 		
 		Toast.makeText(Support.currentContext, "Obtaining location, please wait", Toast.LENGTH_LONG).show();
 		
+		
+		/*
+		 * create a new handler for running things on main thread
+		 */
 		MainActivity.mainHandler = new Handler(){
 			  @Override
 			  public void handleMessage(Message msg ) 
@@ -160,6 +169,7 @@ public class MainActivity extends Activity {
 			playerMarkerOptions.position(latLng);
 			playerMarker = MapHandler.mMap.addMarker(playerMarkerOptions);
 			
+			Support.databaseEngine.addPointToDatabase(Support.locationToLatLng(location));
 			
 			//need a way to check whatever the game is running yet or not
 			//there is room for improvement here

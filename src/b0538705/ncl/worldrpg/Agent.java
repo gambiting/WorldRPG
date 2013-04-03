@@ -9,12 +9,15 @@ import java.util.Observer;
 import android.os.Handler;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Agent implements Observer {
+	
+	public static ArrayList<BitmapDescriptor> animationSprites1 = new ArrayList<BitmapDescriptor>();
 	
 	public LatLng position;
 	
@@ -28,6 +31,7 @@ public class Agent implements Observer {
 	
 	public boolean changed=false;
 	
+	public ArrayList<BitmapDescriptor> animationSprites;
 	
 	private int currentSprite;
 	
@@ -53,6 +57,14 @@ public class Agent implements Observer {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
+	public void useSprites(ArrayList<BitmapDescriptor> sprites)
+	{
+		this.animationSprites = (ArrayList<BitmapDescriptor>) sprites.clone();
+		//reset the sprite counter
+		currentSprite = (int)(Math.random()*(this.animationSprites.size()-1));
+	}
+	
 	private void initializePosition()
 	{
 		LatLng tempPosition = Player.instance.position;
@@ -72,7 +84,8 @@ public class Agent implements Observer {
 				{
 					if(a.changed)
 					{
-						//the only place to safely call this function
+						//this is the only place to safely call this function
+						//it modifies the map, so it can only be run on the main thread
 						a.updateMarkerOnMap();
 						//set agent changed to false
 						a.changed=false;
@@ -84,8 +97,10 @@ public class Agent implements Observer {
 	}
 	
 	//run ONLY from main thread, never call directly
+	//updates the map, must be run from the main thread
 	public void updateMarkerOnMap()
 	{
+		// if marker already exists, remove it
 		if(marker!=null)
 		{
 			marker.remove();	
@@ -93,21 +108,16 @@ public class Agent implements Observer {
 		
 		markerOptions = new MarkerOptions().position(this.position);
 		
-		switch(currentSprite)
+		
+		//cycle through the animation sprites if there are any
+		//if there is none, the default Google Marker icon will be used
+		if(this.animationSprites.size()>0)
 		{
-		case 1:
-			markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.npc_1_1));
-			break;
-		case 2:
-			markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.npc_1_2));
-			break;
-		case 3:
-			markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.npc_1_3));
-			break;
+			markerOptions.icon(this.animationSprites.get(currentSprite));
+			currentSprite = (currentSprite+1)%3;
 		}
 		
-		currentSprite++;
-		currentSprite = currentSprite%3 + 1;
+		
 		
 		
 		marker = MapHandler.mMap.addMarker(markerOptions);

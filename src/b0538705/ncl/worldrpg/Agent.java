@@ -137,7 +137,7 @@ public class Agent implements Observer {
 	
 	public void moveAbout()
 	{
-		Log.d("worldrpg", "Agent no. " + id + " moving about");
+		//Log.d("worldrpg", "Agent no. " + id + " moving about");
 		this.position = Support.transformPositionBy(this.position, Math.random()*4.0-2.0, Math.random()*4.0-2.0);
 		this.changed = true;
 		this.updateMarker();

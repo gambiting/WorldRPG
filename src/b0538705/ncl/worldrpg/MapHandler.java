@@ -42,7 +42,7 @@ public class MapHandler implements OnMapClickListener, OnCameraChangeListener {
 		//Toast.makeText(Support.currentContext, "You clicked on: " + point.latitude + "; " + point.longitude, Toast.LENGTH_LONG).show();
 		int tempX = MapHandler.currentProjection.toScreenLocation(point).x;
 		int tempY = MapHandler.currentProjection.toScreenLocation(point).y;
-		Log.d("worldrpg-camera", "You clicked on: " + tempX + "," + tempY );
+		Support.printDebug("worldrpg-camera", "You clicked on: " + tempX + "," + tempY );
 	}
 	
 

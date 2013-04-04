@@ -2,6 +2,10 @@ package b0538705.ncl.worldrpg;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
+import android.widget.EditText;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -17,6 +21,9 @@ public class Support {
 	public static Context currentContext;
 	
 	public static DatabaseEngine databaseEngine;
+	
+	public static TextView debugView;
+	public static ScrollView debugScroller;
 	
 	
 	//update frequency in seconds
@@ -50,7 +57,7 @@ public class Support {
 	public static void initializeGeneral()
 	{
 		//debug
-		Support.currentContext.deleteDatabase("worldrpg.db");
+		//Support.currentContext.deleteDatabase("worldrpg.db");
 		Support.databaseEngine = new DatabaseEngine(Support.currentContext);
 	}
 	
@@ -77,6 +84,14 @@ public class Support {
 		Agent.animationSprites1.add(BitmapDescriptorFactory.fromResource(R.drawable.npc_1_1));
 		Agent.animationSprites1.add(BitmapDescriptorFactory.fromResource(R.drawable.npc_1_2));
 		Agent.animationSprites1.add(BitmapDescriptorFactory.fromResource(R.drawable.npc_1_3));
+	}
+	
+	public static void printDebug(String source, String message)
+	{
+		Support.debugView.append(source + " - " + message + "\n");
+		Support.debugScroller.smoothScrollTo(0, Support.debugView.getBottom());
+		
+		Log.d(source, message);
 	}
 
 }

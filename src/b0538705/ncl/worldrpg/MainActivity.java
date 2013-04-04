@@ -30,9 +30,15 @@ import android.graphics.drawable.Drawable;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -98,6 +104,12 @@ public class MainActivity extends Activity {
 		Player.instance = new Player();
 		MapHandler.initMap(this);
 		Support.initializeAssets();
+		
+		Support.debugView = (TextView) findViewById(R.id.debug_text);
+		Support.debugScroller = (ScrollView) findViewById(R.id.scroller);
+		
+		Button centreOnPlayerButton = (Button) findViewById(R.id.centreOnPlayerButton);
+		centreOnPlayerButton.setOnClickListener(new centreOnPlayerClickListener());
 
 		playerImage = BitmapDescriptorFactory.fromResource(R.drawable.player);
 
@@ -152,6 +164,16 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
+	
+	private class centreOnPlayerClickListener implements OnClickListener
+	{
+
+		@Override
+		public void onClick(View v) {
+			MapHandler.mMap.animateCamera(CameraUpdateFactory.newLatLng(Player.instance.position), 500, null);
+		}
+		
+	}
 
 	private class myLocationListener implements LocationListener
 	{
@@ -161,21 +183,24 @@ public class MainActivity extends Activity {
 
 			//Log.d("worldrpg", String.valueOf(location.getLatitude()) + " ; " +  String.valueOf(location.getLongitude()));
 			LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-			MapHandler.mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 			
-			Player.instance.position = latLng;
-
-			playerMarker.remove();
-			playerMarkerOptions.position(latLng);
-			playerMarker = MapHandler.mMap.addMarker(playerMarkerOptions);
-			
-			Support.databaseEngine.addPointToDatabase(Support.locationToLatLng(location));
-			
-			//need a way to check whatever the game is running yet or not
-			//there is room for improvement here
-			if(Support.activeScenario==null)
+			//only update if the location changed
+			if(Player.instance.position==null || !Player.instance.position.equals(latLng))
 			{
-				Support.initializeThreads();
+				MapHandler.mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+				
+				Player.instance.locationUpdate(Support.locationToLatLng(location));
+	
+				playerMarker.remove();
+				playerMarkerOptions.position(latLng);
+				playerMarker = MapHandler.mMap.addMarker(playerMarkerOptions);
+				
+				//need a way to check whatever the game is running yet or not
+				//there is room for improvement here
+				if(Support.activeScenario==null)
+				{
+					Support.initializeThreads();
+				}
 			}
 
 		}

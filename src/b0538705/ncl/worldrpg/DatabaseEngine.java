@@ -38,29 +38,41 @@ public class DatabaseEngine {
 	public boolean areAnyPointsWithinRange(LatLng location)
 	{
 		
+		//convert meters to geographical coordinates
 		double rangeLat = ((rangeOfInfluence*3.2808399)/3.64)*0.00001;
 		double rangeLon = ((rangeOfInfluence*3.2808399)/2.22)*0.00001;
 		
 		double latitude = location.latitude;
 		double longitude = location.longitude;
 		
+		//form a query that will return only points within the range
+		//limit 1, since we only need to know if there are any, not how many of them
 		String query = 
 				"select * from POINTS where " + (latitude-rangeLat) + " < latitude AND "
 				+ (latitude+rangeLat) + " > latitude AND "
 				+ (longitude-rangeLon) + " < longitude AND "
-				+ (longitude+rangeLon) + " > longitude ;";
+				+ (longitude+rangeLon) + " > longitude "
+				+ "LIMIT 1;"; 
 		
+		
+		//get the database
 		SQLiteDatabase db = localDatabase.getReadableDatabase();
 		
+		//execute query
 		Cursor result = db.rawQuery(query,null);
+		
 		
 		if(result.getCount()>0)
 		{
-			Log.d("worldrpg-database", "there are other points around!");
+			db.close();
+			result.close();
+			Support.printDebug("worldrpg-database", "point exists for your location - not created");
 			return true;
 		}else
 		{
-			Log.d("worldrpg-database", "there are no other points around!");
+			db.close();
+			result.close();
+			Support.printDebug("worldrpg-database", "point created in the database");
 			return false;
 		}
 

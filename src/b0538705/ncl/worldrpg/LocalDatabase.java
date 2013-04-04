@@ -10,7 +10,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
 	
 	
 	public static String CREATE_TABLE_POINTS =
-			"create table POINTS( _id integer primary key,"
+			"create table POINTS( _id integer primary key autoincrement,"
 			+ "latitude text not null,"
 			+ "longitude text not null,"
 			+ "normal integer not null,"

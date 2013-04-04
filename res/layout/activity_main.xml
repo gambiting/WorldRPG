@@ -1,13 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/map"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    class="com.google.android.gms.maps.MapFragment"
-    map:uiRotateGestures="false"
-    map:uiScrollGestures="false"
-    map:uiZoomControls="false"
-    map:uiZoomGestures="true" 
-    map:cameraZoom="18"
-    />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   	android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+	<fragment xmlns:map="http://schemas.android.com/apk/res-auto"
+	    android:id="@+id/map"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_alignParentTop="true"
+	    android:layout_alignParentLeft="true"
+	    class="com.google.android.gms.maps.MapFragment"
+	    map:uiRotateGestures="false"
+	    map:uiScrollGestures="false"
+	    map:uiZoomControls="false"
+	    map:uiZoomGestures="false" 
+	    map:cameraZoom="18"
+	    
+	    />
+	<ScrollView 
+	    android:id="@+id/scroller"
+	    android:layout_width="250dp"
+	    android:layout_height="100dp"
+	    android:layout_alignParentTop="true"
+	    android:layout_alignParentLeft="true"
+	    android:background="@android:color/white">
+	<TextView
+	    android:id="@+id/debug_text"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:textSize="10sp"
+	    
+	   />
+	</ScrollView>
+	
+	<Button
+	    android:id="@+id/centreOnPlayerButton"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentLeft="true"
+	    android:layout_margin="10dp"
+	    android:text="Center on Player"/>
+</RelativeLayout>

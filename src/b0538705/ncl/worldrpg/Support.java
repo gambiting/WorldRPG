@@ -1,6 +1,7 @@
 package b0538705.ncl.worldrpg;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.apache.http.util.LangUtils;
 
@@ -117,5 +118,26 @@ public class Support {
 	{
 		return distanceBetweenTwoPoints(position1.latitude, position1.longitude, position2.latitude, position2.longitude);
 	}
-
+	
+	/*
+	 * removes all spawn points and their associated agents that are further away than a given distance
+	 */
+	public static void clipSpawningLocations(double distance)
+	{
+		Iterator<SpawningLocation> it = Support.activeSpawningLocations.iterator();
+		
+		//iterate through all active spawning location elements
+		while(it.hasNext())
+		{
+			SpawningLocation tempSpawningLocation = it.next();
+			//if the distance between the spawning location and the player is smaller than the given distance,remove the spawning location
+			if(distanceBetweenTwoPoints(tempSpawningLocation.position, Player.instance.position) > distance)
+			{
+				//call clean up first
+				tempSpawningLocation.cleanUp();
+				//remove the element
+				it.remove();
+			}
+		}
+	}
 }

@@ -161,10 +161,16 @@ public class MainActivity extends Activity {
 
 	}
 
+	/*
+	 * quit the application while paused, otherwise all the timers still run
+	 * (could pause them but too much pain)
+	 * (non-Javadoc)
+	 * @see android.app.Activity#onPause()
+	 */
 	@Override
 	protected void onPause() {
 		
-		System.exit(0);
+		//System.exit(0);
 		super.onPause();
 	}
 
@@ -222,6 +228,8 @@ public class MainActivity extends Activity {
 				Message msg = MainActivity.mainHandler.obtainMessage(1, "location_obtained");
 				MainActivity.mainHandler.dispatchMessage(msg);
 				
+				// clip every spawning location that is further away than 2 spawn points away
+				Support.clipSpawningLocations(Support.activeScenario.spawningLocationWidth*4);
 			}
 
 		}

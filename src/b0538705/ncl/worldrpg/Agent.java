@@ -143,6 +143,23 @@ public class Agent implements Observer {
 		this.changed = true;
 		this.updateMarker();
 	}
+	
+	public void cleanUp()
+	{
+		
+		//remove the marker off the map if this agent has one
+		if(this.marker!=null)
+		{
+			this.marker.remove();
+		}
+				
+		
+		//remove itself from the list of observers
+		Support.agentsNotifier.deleteObserver(this);
+		
+		
+		
+	}
 
 	@Override
 	public void update(Observable observable, Object data) {

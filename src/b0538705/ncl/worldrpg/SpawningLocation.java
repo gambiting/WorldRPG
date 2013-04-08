@@ -17,6 +17,8 @@ public class SpawningLocation {
 	int infected=0;
 
 	public ArrayList<Agent> activeAgents;
+	
+	public ArrayList<Polygon> activePolygons;
 
 	public SpawningLocation(long ID,LatLng pos)
 	{
@@ -45,6 +47,7 @@ public class SpawningLocation {
 	private void init()
 	{
 		this.activeAgents = new ArrayList<Agent>();
+		this.activePolygons = new ArrayList<Polygon>();
 
 		//add the number of normal agents
 		for(int i=0;i<this.normal;i++)
@@ -60,7 +63,25 @@ public class SpawningLocation {
 		//DEBUG
 		this.addDebugLines();
 	}
+	
+	public void cleanUp()
+	{
+		//clean up the agents
+		for(Agent a:this.activeAgents)
+		{
+			a.cleanUp();
+		}
+		
+		//remove the polygons if there are any
+		for(Polygon p:this.activePolygons)
+		{
+			p.remove();
+		}
+	}
 
+	/*
+	 * draws debug lines around the spawn point - a rectangle as big as the spawning area
+	 */
 	public void addDebugLines()
 	{
 		double latOffset = ((Support.activeScenario.spawningLocationWidth*3.2808399)/3.64)*0.00001;
@@ -77,6 +98,8 @@ public class SpawningLocation {
 		.add(temp1,temp2,temp3,temp4)
 		.strokeColor(Color.RED)
 		.fillColor(Color.TRANSPARENT));
+		
+		this.activePolygons.add(polygon);
 
 	}
 

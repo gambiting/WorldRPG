@@ -4,23 +4,18 @@ import java.util.ArrayList;
 
 public class Scenario  {
 	
-
-	//agents active in this scenario
-	public ArrayList<Agent> activeAgents;
 	
-	//initial number of agents:
-	public int initialNumberOfAgents = 20;
+	
+	//each number is given per spawning location
+	public int normal=10;
+	public int infected=5;
+	
+	//width(and height) of the spawning location, in meters
+	public int spawningLocationWidth = 50;
 	
 	public Scenario()
 	{
-		activeAgents = new ArrayList<Agent>();
-		
-		for(int i=0;i<initialNumberOfAgents;i++)
-		{
-			Agent tempAgent = new Agent(i);
-			tempAgent.useSprites(Agent.animationSprites1);
-			activeAgents.add(tempAgent);
-		}
+		//TODO yaml file loading
 	}
 
 

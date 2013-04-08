@@ -1,5 +1,9 @@
 package b0538705.ncl.worldrpg;
 
+import java.util.ArrayList;
+
+import org.apache.http.util.LangUtils;
+
 import android.content.Context;
 import android.location.Location;
 import android.util.Log;
@@ -24,6 +28,8 @@ public class Support {
 	
 	public static TextView debugView;
 	public static ScrollView debugScroller;
+	
+	public static ArrayList<SpawningLocation> activeSpawningLocations = new ArrayList<SpawningLocation>();
 	
 	
 	//update frequency in seconds
@@ -92,6 +98,24 @@ public class Support {
 		Support.debugScroller.smoothScrollTo(0, Support.debugView.getBottom());
 		
 		Log.d(source, message);
+	}
+	
+	public static double distanceBetweenTwoPoints(double latitude1, double longitude1, double latitude2, double longitude2)
+	{
+		Location l1 = new Location("point 1");
+		l1.setLatitude(latitude1);
+		l1.setLongitude(longitude1);
+		
+		Location l2 = new Location("point 2");
+		l2.setLatitude(latitude2);
+		l2.setLongitude(longitude2);
+		
+		return l1.distanceTo(l2);
+	}
+	
+	public static double distanceBetweenTwoPoints(LatLng position1, LatLng position2)
+	{
+		return distanceBetweenTwoPoints(position1.latitude, position1.longitude, position2.latitude, position2.longitude);
 	}
 
 }

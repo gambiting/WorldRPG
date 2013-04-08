@@ -43,6 +43,8 @@ public class MapHandler implements OnMapClickListener, OnCameraChangeListener {
 		int tempX = MapHandler.currentProjection.toScreenLocation(point).x;
 		int tempY = MapHandler.currentProjection.toScreenLocation(point).y;
 		Support.printDebug("worldrpg-camera", "You clicked on: " + tempX + "," + tempY );
+		
+		
 	}
 	
 

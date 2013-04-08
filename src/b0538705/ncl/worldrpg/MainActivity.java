@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.service.wallpaper.WallpaperService;
@@ -142,8 +143,7 @@ public class MainActivity extends Activity {
 		
 		
 		
-		Toast.makeText(Support.currentContext, "Obtaining location, please wait", Toast.LENGTH_LONG).show();
-		
+		final ProgressDialog waitingForLocationDialog = ProgressDialog.show(this, "WorldRPG", "Obtaining location, please wait", true);
 		
 		/*
 		 * create a new handler for running things on main thread
@@ -152,10 +152,20 @@ public class MainActivity extends Activity {
 			  @Override
 			  public void handleMessage(Message msg ) 
 			  {
-				  // this handler will just run whatever comes its way, so it's fine
+				  if(((String)msg.obj).equals("location_obtained"))
+				  {
+					  waitingForLocationDialog.dismiss();
+				  }
 			  }
 			};
 
+	}
+
+	@Override
+	protected void onPause() {
+		
+		System.exit(0);
+		super.onPause();
 	}
 
 	@Override
@@ -184,23 +194,34 @@ public class MainActivity extends Activity {
 			//Log.d("worldrpg", String.valueOf(location.getLatitude()) + " ; " +  String.valueOf(location.getLongitude()));
 			LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 			
-			//only update if the location changed
-			if(Player.instance.position==null || !Player.instance.position.equals(latLng))
+			//only update if the location changed or if the distance between the current location and the old one is larger than 20 metres
+			if(Player.instance.position==null || Support.distanceBetweenTwoPoints(latLng, Player.instance.position) > 20)
 			{
 				MapHandler.mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 				
-				Player.instance.locationUpdate(Support.locationToLatLng(location));
+				
 	
+				
+				//need a way to check whatever the game is running yet or not
+				//there is room for improvement here
+				//TODO move somewhere else
+				if(Support.activeScenario==null)
+				{
+					Support.initializeThreads();
+					
+					
+				}
+				
+				Player.instance.locationUpdate(Support.locationToLatLng(location));
+				
 				playerMarker.remove();
 				playerMarkerOptions.position(latLng);
 				playerMarker = MapHandler.mMap.addMarker(playerMarkerOptions);
 				
-				//need a way to check whatever the game is running yet or not
-				//there is room for improvement here
-				if(Support.activeScenario==null)
-				{
-					Support.initializeThreads();
-				}
+				
+				Message msg = MainActivity.mainHandler.obtainMessage(1, "location_obtained");
+				MainActivity.mainHandler.dispatchMessage(msg);
+				
 			}
 
 		}

@@ -1,12 +1,17 @@
 package b0538705.ncl.worldrpg;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Player {
 
 	public LatLng position;
 	
 	public static Player instance;
+	
+	private MarkerOptions markerOptions;
+	private Marker marker;
 	
 	public Player()
 	{
@@ -28,9 +33,9 @@ public class Player {
 		
 		
 		//calculate latitude offset
-		double latOffset = ((DatabaseEngine.rangeOfInfluence*2*3.2808399)/3.64)*0.00001;
+		double latOffset = ((Support.activeScenario.spawningLocationWidth*2*3.2808399)/3.64)*0.00001;
 		//calculate longitude offset
-		double lonOffset = ((DatabaseEngine.rangeOfInfluence*2*3.2808399)/3.64)*0.00001;
+		double lonOffset = ((Support.activeScenario.spawningLocationWidth*2*3.2808399)/2.22)*0.00001;
 		
 		//temporary variable for new locations
 		LatLng tempLocation;

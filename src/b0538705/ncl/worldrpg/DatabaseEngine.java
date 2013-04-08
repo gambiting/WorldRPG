@@ -1,5 +1,6 @@
 package b0538705.ncl.worldrpg;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,8 +14,6 @@ public class DatabaseEngine {
 	
 	public static LocalDatabase localDatabase;
 	
-	//range per single point - in meters
-	public static int rangeOfInfluence=200;
 	
 	
 	public DatabaseEngine(Context context)
@@ -26,9 +25,23 @@ public class DatabaseEngine {
 	{
 		if(!areAnyPointsWithinRange(location))
 		{
+			
+			//write that location to the database
 			SQLiteDatabase db = DatabaseEngine.localDatabase.getWritableDatabase();
 			
-			db.execSQL("insert into POINTS VALUES(null,'" + location.latitude + "','" + location.longitude + "', 0 , 0);");
+			ContentValues values = new ContentValues();
+			values.put("latitude", location.latitude);
+			values.put("longitude", location.longitude);
+			values.put("normal", Support.activeScenario.normal);
+			values.put("infected", Support.activeScenario.infected);
+			
+			
+			long id = db.insert("POINTS",null, values);
+			
+			db.close();
+			
+			//add the inserted location into the game,with default values
+			Support.activeSpawningLocations.add(new SpawningLocation(id, location));
 		}
 		
 		
@@ -39,20 +52,19 @@ public class DatabaseEngine {
 	{
 		
 		//convert meters to geographical coordinates
-		double rangeLat = ((rangeOfInfluence*3.2808399)/3.64)*0.00001;
-		double rangeLon = ((rangeOfInfluence*3.2808399)/2.22)*0.00001;
+		double rangeLat = ((Support.activeScenario.spawningLocationWidth*3.2808399)/3.64)*0.00001;
+		double rangeLon = ((Support.activeScenario.spawningLocationWidth*3.2808399)/2.22)*0.00001;
 		
 		double latitude = location.latitude;
 		double longitude = location.longitude;
 		
 		//form a query that will return only points within the range
-		//limit 1, since we only need to know if there are any, not how many of them
 		String query = 
-				"select * from POINTS where " + (latitude-rangeLat) + " < latitude AND "
-				+ (latitude+rangeLat) + " > latitude AND "
-				+ (longitude-rangeLon) + " < longitude AND "
-				+ (longitude+rangeLon) + " > longitude "
-				+ "LIMIT 1;"; 
+				"select * from POINTS where " + (latitude-rangeLat) + " <= latitude AND "
+				+ (latitude+rangeLat) + " >= latitude AND "
+				+ (longitude-rangeLon) + " <= longitude AND "
+				+ (longitude+rangeLon) + " >= longitude "
+				+ ";"; 
 		
 		
 		//get the database
@@ -64,18 +76,56 @@ public class DatabaseEngine {
 		
 		if(result.getCount()>0)
 		{
+			//check all points within range to see if they were already added, if not add them
+			//move to the next result, quit the loop if there are no more left
+			while(result.moveToNext())
+			{
+				//get the id
+				long tempID = result.getLong(0);
+				if(!DatabaseEngine.doesSpawningLocationExists(tempID))
+				{
+					//if there is no such location added yet to the game,add it:
+					double tempLatitude = result.getDouble(1);
+					double tempLongitute = result.getDouble(2);
+					int tempNormal = result.getInt(3);
+					int tempInfected = result.getInt(4);
+					
+					SpawningLocation tempSpawningLocation = new SpawningLocation(tempID, new LatLng(tempLatitude,tempLongitute), tempNormal, tempInfected);
+					Support.activeSpawningLocations.add(tempSpawningLocation);
+					
+					Support.printDebug("worldrpg-database", "point existed in the database - loaded");
+				}
+				
+				
+				
+				
+				
+			}
+			
 			db.close();
 			result.close();
-			Support.printDebug("worldrpg-database", "point exists for your location - not created");
+			
 			return true;
 		}else
 		{
 			db.close();
 			result.close();
-			Support.printDebug("worldrpg-database", "point created in the database");
+			Support.printDebug("worldrpg-database", "point did not exist - created in the database");
 			return false;
 		}
 
+	}
+	
+	public static boolean doesSpawningLocationExists(long id)
+	{
+		for(SpawningLocation sp: Support.activeSpawningLocations)
+		{
+			if(sp.id == id)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

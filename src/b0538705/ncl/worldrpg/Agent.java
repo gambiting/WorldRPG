@@ -17,7 +17,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Agent implements Observer {
 
-	public static ArrayList<BitmapDescriptor> animationSprites1 = new ArrayList<BitmapDescriptor>();
+	public static ArrayList<BitmapDescriptor> animationSpritesNormal = new ArrayList<BitmapDescriptor>();
+	public static ArrayList<BitmapDescriptor> animationSpritesInfected = new ArrayList<BitmapDescriptor>();
+	public static ArrayList<BitmapDescriptor> animationSpritesPanicked = new ArrayList<BitmapDescriptor>();
 
 	public LatLng position;
 	public ArrayList<ActionPackage> actionStack;
@@ -27,6 +29,8 @@ public class Agent implements Observer {
 	private Marker marker;
 
 	public boolean changed=false;
+	
+	public String state;
 
 	public ArrayList<BitmapDescriptor> animationSprites;
 

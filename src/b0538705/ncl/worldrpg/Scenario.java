@@ -10,6 +10,7 @@ public class Scenario  {
 	//each number is given per spawning location
 	public int normal=10;
 	public int infected=5;
+	public int panicked=5;
 	
 	//width(and height) of the spawning location, in meters
 	public int spawningLocationWidth = 50;

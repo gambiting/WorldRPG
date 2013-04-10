@@ -81,11 +81,6 @@ public class MainActivity extends Activity {
 		 * yaml experimentation
 		 */
 		
-		Yaml yaml = new Yaml(new Constructor(Scenario.class));
-		String document = "\n- Hesperiidae\n- Papilionidae\n- Apatelodidae\n- Epiplemidae";
-		InputStream basicScenarioStream = getResources().openRawResource(R.raw.scenario_disease_1);
-		@SuppressWarnings("unchecked")
-		Scenario testScenario = (Scenario) yaml.load(basicScenarioStream);		
 		
 		//Log.d("worldrpg-yaml", object.toString());
 		

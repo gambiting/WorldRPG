@@ -14,7 +14,8 @@ public class LocalDatabase extends SQLiteOpenHelper {
 			+ "latitude text not null,"
 			+ "longitude text not null,"
 			+ "normal integer not null,"
-			+ "infected integer not null);";
+			+ "infected integer not null,"
+			+ "panicked integer not null);";
 
 	public LocalDatabase(Context context)
 	{

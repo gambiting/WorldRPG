@@ -15,9 +15,10 @@ public class SpawningLocation {
 
 	int normal=0;
 	int infected=0;
+	int panicked=0;
 
 	public ArrayList<Agent> activeAgents;
-	
+
 	public ArrayList<Polygon> activePolygons;
 
 	public SpawningLocation(long ID,LatLng pos)
@@ -27,19 +28,21 @@ public class SpawningLocation {
 
 		this.normal = Support.activeScenario.normal;
 		this.infected = Support.activeScenario.infected;
+		this.panicked = Support.activeScenario.panicked;
 
 
 		this.init();
 	}
 
-	public SpawningLocation(long ID, LatLng pos, int Normal, int Infected)
+	public SpawningLocation(long ID, LatLng pos, int Normal, int Infected,int Panicked)
 	{
 		this.id = ID;
 		this.position = pos;
-		
+
 		this.normal = Normal;
 		this.infected = Infected;
-		
+		this.panicked = Panicked;
+
 		this.init();
 
 	}
@@ -53,17 +56,36 @@ public class SpawningLocation {
 		for(int i=0;i<this.normal;i++)
 		{
 			Agent tempAgent = new Agent(this);
-			tempAgent.useSprites(Agent.animationSprites1);
+			tempAgent.useSprites(Agent.animationSpritesNormal);
+			tempAgent.state = "normal";
 			this.activeAgents.add(tempAgent);
 		}
 
-		//TODO add infected and other types
+		//add the number of normal agents
+		for(int i=0;i<this.infected;i++)
+		{
+			Agent tempAgent = new Agent(this);
+			tempAgent.useSprites(Agent.animationSpritesInfected);
+			tempAgent.state = "infected";
+			this.activeAgents.add(tempAgent);
+		}
+
+		//add the number of normal agents
+		for(int i=0;i<this.panicked;i++)
+		{
+			Agent tempAgent = new Agent(this);
+			tempAgent.useSprites(Agent.animationSpritesPanicked);
+			tempAgent.state = "panicked";
+			this.activeAgents.add(tempAgent);
+		}
+
+
 
 
 		//DEBUG
 		this.addDebugLines();
 	}
-	
+
 	public void cleanUp()
 	{
 		//clean up the agents
@@ -71,7 +93,7 @@ public class SpawningLocation {
 		{
 			a.cleanUp();
 		}
-		
+
 		//remove the polygons if there are any
 		for(Polygon p:this.activePolygons)
 		{
@@ -98,7 +120,7 @@ public class SpawningLocation {
 		.add(temp1,temp2,temp3,temp4)
 		.strokeColor(Color.RED)
 		.fillColor(Color.TRANSPARENT));
-		
+
 		this.activePolygons.add(polygon);
 
 	}

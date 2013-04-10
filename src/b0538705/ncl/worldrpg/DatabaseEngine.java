@@ -34,6 +34,7 @@ public class DatabaseEngine {
 			values.put("longitude", location.longitude);
 			values.put("normal", Support.activeScenario.normal);
 			values.put("infected", Support.activeScenario.infected);
+			values.put("panicked", Support.activeScenario.panicked);
 			
 			
 			long id = db.insert("POINTS",null, values);
@@ -89,8 +90,9 @@ public class DatabaseEngine {
 					double tempLongitute = result.getDouble(2);
 					int tempNormal = result.getInt(3);
 					int tempInfected = result.getInt(4);
+					int tempPanicked = result.getInt(5);
 					
-					SpawningLocation tempSpawningLocation = new SpawningLocation(tempID, new LatLng(tempLatitude,tempLongitute), tempNormal, tempInfected);
+					SpawningLocation tempSpawningLocation = new SpawningLocation(tempID, new LatLng(tempLatitude,tempLongitute), tempNormal, tempInfected, tempPanicked);
 					Support.activeSpawningLocations.add(tempSpawningLocation);
 					
 					Support.printDebug("worldrpg-database", "point existed in the database - loaded");

@@ -5,6 +5,11 @@ public class ActionMethod {
 	public String name;
 	public Object parameters;
 	
+	public ActionMethod()
+	{
+		
+	}
+	
 	public ActionMethod(String Name, Object Parameters)
 	{
 		this.name = Name;

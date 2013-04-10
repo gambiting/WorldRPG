@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Construct;
+import org.yaml.snakeyaml.constructor.Constructor;
 
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -80,11 +81,13 @@ public class MainActivity extends Activity {
 		 * yaml experimentation
 		 */
 		
-		Yaml yaml = new Yaml();
+		Yaml yaml = new Yaml(new Constructor(Scenario.class));
 		String document = "\n- Hesperiidae\n- Papilionidae\n- Apatelodidae\n- Epiplemidae";
-		InputStream basicScenarioStream = getResources().openRawResource(R.raw.basic);
+		InputStream basicScenarioStream = getResources().openRawResource(R.raw.scenario_disease_1);
 		@SuppressWarnings("unchecked")
-		Map<String, Object> object = (Map<String, Object>) yaml.load(basicScenarioStream);
+		Scenario testScenario = (Scenario) yaml.load(basicScenarioStream);		
+		
+		//Log.d("worldrpg-yaml", object.toString());
 		
 		
 		//Log.d("worldrpg", object.toString());
@@ -229,6 +232,7 @@ public class MainActivity extends Activity {
 				MainActivity.mainHandler.dispatchMessage(msg);
 				
 				// clip every spawning location that is further away than 2 spawn points away
+				//times 4 since the width is from the centre to the edge
 				Support.clipSpawningLocations(Support.activeScenario.spawningLocationWidth*4);
 			}
 

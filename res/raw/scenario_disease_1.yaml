@@ -1,0 +1,29 @@
+scenario: 1
+name    : Disease Outbreak 1
+normal  : 20
+infected: 10
+panicked: 5
+spawningLocationWidth: 50
+agentTemplate:
+    actionStack:
+       - id: 1
+         name: default package
+         methodsToRun:
+          - name: moveAbout
+            parameters: null
+       - id: 2
+         name: infected package
+         methodsToRun:
+          - name: followAgentWithinRadius
+            parameters: [ infected , 50 ]
+          - name: infect
+            parameters: null
+       - id: 3
+         name: panicked package
+         methodsToRun:
+          - name: runAwayFrom
+            parameters: [infected , 50]
+          - name: runAwayFrom
+            parameters: [player, 200 ]
+          
+            

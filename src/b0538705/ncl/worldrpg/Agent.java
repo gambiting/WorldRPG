@@ -34,6 +34,10 @@ public class Agent implements Observer {
 	
 	public SpawningLocation parentSpawningLocation;
 
+	public Agent()
+	{
+		
+	}
 
 	public Agent(SpawningLocation parent)
 	{

@@ -55,27 +55,24 @@ public class SpawningLocation {
 		//add the number of normal agents
 		for(int i=0;i<this.normal;i++)
 		{
-			Agent tempAgent = new Agent(this);
+			Agent tempAgent = new Agent(this, "normal");
 			tempAgent.useSprites(Agent.animationSpritesNormal);
-			tempAgent.state = "normal";
 			this.activeAgents.add(tempAgent);
 		}
 
 		//add the number of normal agents
 		for(int i=0;i<this.infected;i++)
 		{
-			Agent tempAgent = new Agent(this);
+			Agent tempAgent = new Agent(this, "infected");
 			tempAgent.useSprites(Agent.animationSpritesInfected);
-			tempAgent.state = "infected";
 			this.activeAgents.add(tempAgent);
 		}
 
 		//add the number of normal agents
 		for(int i=0;i<this.panicked;i++)
 		{
-			Agent tempAgent = new Agent(this);
+			Agent tempAgent = new Agent(this, "panicked");
 			tempAgent.useSprites(Agent.animationSpritesPanicked);
-			tempAgent.state = "panicked";
 			this.activeAgents.add(tempAgent);
 		}
 
@@ -99,6 +96,10 @@ public class SpawningLocation {
 		{
 			p.remove();
 		}
+		
+		
+		//update the database
+		Support.databaseEngine.updatePointInTheDatabase(this);
 	}
 
 	/*

@@ -151,4 +151,16 @@ public class Support {
 			}
 		}
 	}
+	
+	/*
+	 * returns all agents withing a certain radius with a given state
+	 */
+	public ArrayList<Agent> returnAgentsWithinRadius(double radius, String state, int limit)
+	{
+		ArrayList<Agent> tempAgents = new ArrayList<Agent>();
+		
+		
+		
+		return tempAgents;
+	}
 }

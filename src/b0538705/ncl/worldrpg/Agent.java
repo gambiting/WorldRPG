@@ -43,12 +43,14 @@ public class Agent implements Observer {
 		
 	}
 
-	public Agent(SpawningLocation parent)
+	public Agent(SpawningLocation parent, String State)
 	{
 		actionStack = new ArrayList<ActionPackage>();
 		this.parentSpawningLocation = parent;
 		initializePosition();
-
+		
+		this.state = State;
+		
 		/*
 		 * debug code
 		 */

@@ -49,6 +49,23 @@ public class DatabaseEngine {
 		return false;
 	}
 	
+	public void updatePointInTheDatabase(SpawningLocation sl)
+	{
+		//update the given location
+		SQLiteDatabase db = DatabaseEngine.localDatabase.getWritableDatabase();
+		
+		ContentValues values = new ContentValues();
+		values.put("normal", sl.normal);
+		values.put("infected", sl.infected);
+		values.put("panicked", sl.panicked);
+		
+		long id = sl.id;
+		
+		db.update("POINTS", values, "_id=" + id, null);
+		
+		db.close();
+	}
+	
 	public boolean areAnyPointsWithinRange(LatLng location)
 	{
 		

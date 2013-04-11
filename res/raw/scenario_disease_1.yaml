@@ -1,9 +1,9 @@
 scenario: 1
 name    : Disease Outbreak 1
-normal  : 3
-infected: 2
-panicked: 1
-spawningLocationWidth: 100
+normal  : 20
+infected: 5
+panicked: 2
+spawningLocationWidth: 20
 agentTemplate:
     actionStack:
        - id: 1

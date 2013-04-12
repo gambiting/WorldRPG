@@ -1,9 +1,9 @@
 scenario: 1
 name    : Disease Outbreak 1
-normal  : 20
-infected: 5
+normal  : 10
+infected: 3
 panicked: 2
-spawningLocationWidth: 20
+spawningLocationWidth: 50
 agentTemplate:
     actionStack:
        - id: 1
@@ -17,7 +17,7 @@ agentTemplate:
           - name: followWithinRadius
             parameters: [ normal , 50 ]
           - name: infect
-            parameters: null
+            parameters: [ 3 ]
        - id: 3
          name: panicked package
          methodsToRun:

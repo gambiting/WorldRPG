@@ -2,6 +2,8 @@ package b0538705.ncl.worldrpg;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.http.util.LangUtils;
 
@@ -30,7 +32,7 @@ public class Support {
 	public static TextView debugView;
 	public static ScrollView debugScroller;
 
-	public static ArrayList<SpawningLocation> activeSpawningLocations = new ArrayList<SpawningLocation>();
+	public static BlockingQueue<SpawningLocation> activeSpawningLocations = new LinkedBlockingQueue<SpawningLocation>();
 
 
 	//update frequency in seconds
@@ -155,11 +157,27 @@ public class Support {
 	/*
 	 * returns all agents withing a certain radius with a given state
 	 */
-	public ArrayList<Agent> returnAgentsWithinRadius(double radius, String state, int limit)
+	public static BlockingQueue<Agent> returnAgentsWithinRadius(LatLng origin, double radius, String state, int limit)
 	{
-		ArrayList<Agent> tempAgents = new ArrayList<Agent>();
+		BlockingQueue<Agent> tempAgents = new LinkedBlockingQueue<Agent>();
 		
-		
+		for(SpawningLocation sl:Support.activeSpawningLocations)
+		{
+			for(Agent a:sl.activeAgents)
+			{
+				if(a.state.equals(state) && (Support.distanceBetweenTwoPoints(origin, a.position)<radius))
+				{
+					tempAgents.add(a);
+					
+					//if the limit was reached, then quit the function
+					// if the limit is equal to 0 then return all agents within radius
+					if(limit!=0 && tempAgents.size()==limit)
+					{
+						return tempAgents;
+					}
+				}
+			}
+		}
 		
 		return tempAgents;
 	}

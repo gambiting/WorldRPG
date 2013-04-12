@@ -3,14 +3,14 @@ package b0538705.ncl.worldrpg;
 public class ActionMethod {
 
 	public String name;
-	public Object parameters;
+	public Object[] parameters;
 	
 	public ActionMethod()
 	{
 		
 	}
 	
-	public ActionMethod(String Name, Object Parameters)
+	public ActionMethod(String Name, Object[] Parameters)
 	{
 		this.name = Name;
 		this.parameters = Parameters;

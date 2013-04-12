@@ -1,6 +1,8 @@
 package b0538705.ncl.worldrpg;
 
 import java.util.ArrayList;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import android.graphics.Color;
 
@@ -17,9 +19,9 @@ public class SpawningLocation {
 	int infected=0;
 	int panicked=0;
 
-	public ArrayList<Agent> activeAgents;
+	public BlockingQueue<Agent> activeAgents;
 
-	public ArrayList<Polygon> activePolygons;
+	public BlockingQueue<Polygon> activePolygons;
 
 	public SpawningLocation(long ID,LatLng pos)
 	{
@@ -49,8 +51,8 @@ public class SpawningLocation {
 
 	private void init()
 	{
-		this.activeAgents = new ArrayList<Agent>();
-		this.activePolygons = new ArrayList<Polygon>();
+		this.activeAgents = new LinkedBlockingQueue<Agent>();
+		this.activePolygons = new LinkedBlockingQueue<Polygon>();
 
 		//add the number of normal agents
 		for(int i=0;i<this.normal;i++)

@@ -168,7 +168,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onPause() {
 		
-		//System.exit(0);
+		System.exit(0);
 		super.onPause();
 	}
 

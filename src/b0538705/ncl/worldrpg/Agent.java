@@ -29,18 +29,20 @@ public class Agent implements Observer {
 	private Marker marker;
 
 	public boolean changed=false;
-	
+
 	public String state;
 
 	public ArrayList<BitmapDescriptor> animationSprites;
 
 	private int currentSprite;
-	
+
 	public SpawningLocation parentSpawningLocation;
+
+	public Agent followedAgent=null;
 
 	public Agent()
 	{
-		
+
 	}
 
 	public Agent(SpawningLocation parent, String State)
@@ -48,15 +50,23 @@ public class Agent implements Observer {
 		actionStack = new ArrayList<ActionPackage>();
 		this.parentSpawningLocation = parent;
 		initializePosition();
-		
+
 		this.state = State;
-		
+
 		/*
 		 * debug code
 		 */
-		ActionPackage tempPackage = new ActionPackage();
-		tempPackage.methodsToRun.add(new ActionMethod("moveAbout", null));
-		activeActionPackage = tempPackage;
+		//ActionPackage tempPackage = new ActionPackage();
+		//tempPackage.methodsToRun.add(new ActionMethod("moveAbout", null));
+		//activeActionPackage = tempPackage;
+
+		if(state.equals("normal") || state.equals("panicked"))
+		{
+			activeActionPackage = Support.activeScenario.agentTemplate.getActionPackageContainingName("default");
+		}else if(state.equals("infected"))
+		{
+			activeActionPackage = Support.activeScenario.agentTemplate.getActionPackageContainingName("infected");
+		}
 
 		currentSprite = (int)(Math.random()*3.5);
 
@@ -85,6 +95,23 @@ public class Agent implements Observer {
 
 	public void updateMarker()
 	{
+		//updates sprites where needed
+		//first check if the animation sprites were initialized yet
+		if(this.animationSprites!=null)
+		{
+			if(this.state.equals("normal") && !this.animationSprites.equals(Agent.animationSpritesNormal))
+			{
+				this.useSprites(Agent.animationSpritesNormal);
+			}else if(this.state.equals("infected") && !this.animationSprites.equals(Agent.animationSpritesInfected))
+			{
+				this.useSprites(Agent.animationSpritesInfected);
+			}else if(this.state.equals("panicked") && !this.animationSprites.equals(Agent.animationSpritesPanicked))
+			{
+				this.useSprites(Agent.animationSpritesPanicked);
+			}
+		}
+
+		//post a runnable for the new thread
 		MainActivity.mainHandler.post(new Runnable() {
 
 			@Override
@@ -152,23 +179,76 @@ public class Agent implements Observer {
 		this.position = Support.transformPositionBy(this.position, Math.random()*4.0-2.0, Math.random()*4.0-2.0);
 		this.changed = true;
 		this.updateMarker();
+
 	}
-	
+
+	public void followWithinRadius(String state, Integer radius)
+	{
+
+		//check if there is any agent to follow
+		if(followedAgent!=null)
+		{
+			//if yes, move closer
+			this.position = Support.transformPositionBy(this.position,
+					(this.position.latitude>followedAgent.position.latitude)?(-1):(1),
+							(this.position.longitude>followedAgent.position.longitude)?(-1):(1));
+
+			this.changed = true;
+			this.updateMarker();
+
+		}else
+		{
+			//if not, then find one to follow
+			try {
+				followedAgent=Support.returnAgentsWithinRadius(this.position, radius, state, 1).take();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void infect(Integer radius)
+	{
+		//if the infected agent is within 
+		if(followedAgent!=null && Support.distanceBetweenTwoPoints(this.position, followedAgent.position)<radius)
+		{
+			followedAgent.state="infected";
+			followedAgent.activeActionPackage=Support.activeScenario.agentTemplate.getActionPackageContainingName("infected");
+			followedAgent.changed=true;
+			followedAgent.updateMarker();
+			
+			followedAgent=null;
+		}
+	}
+
 	public void cleanUp()
 	{
-		
+
 		//remove the marker off the map if this agent has one
 		if(this.marker!=null)
 		{
 			this.marker.remove();
 		}
-				
-		
+
+
 		//remove itself from the list of observers
 		Support.agentsNotifier.deleteObserver(this);
-		
-		
-		
+
+
+
+	}
+
+	public ActionPackage getActionPackageContainingName(String name)
+	{
+		for(ActionPackage ap:this.actionStack)
+		{
+			if(ap.name.toLowerCase().contains(name))
+			{
+				return ap;
+			}
+		}
+
+		return null;
 	}
 
 	@Override
@@ -181,8 +261,20 @@ public class Agent implements Observer {
 			//run all methods in the current action package
 			for(ActionMethod am: activeActionPackage.methodsToRun)
 			{
+				Class[] par=null;
+				//get the parameter classes
+				if(am.parameters!=null && am.parameters.length > 0)
+				{
+					par = new Class[am.parameters.length];
+					for(int i=0;i<am.parameters.length;i++)
+					{
+						par[i] = am.parameters[i].getClass();
+					}
+				}
+
 				//get that method
-				Method method = agentClass.getMethod(am.name, null);
+				Method method = agentClass.getMethod(am.name, par);
+
 				method.invoke(this, (Object[])am.parameters);
 			}
 		} catch (Exception e) {

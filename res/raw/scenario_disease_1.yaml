@@ -14,16 +14,20 @@ agentTemplate:
        - id: 2
          name: infected package
          methodsToRun:
-          - name: followWithinRadius
-            parameters: [ normal , 50 ]
-          - name: infect
-            parameters: [ 3 ]
+          - name: moveAbout
+            parameters: null
+          #- name: followAgentWithinRadius
+          #  parameters: [ normal , 50 ]
+          - name: infectAllWithinRadius
+            parameters: [ 5 ]
+            delayBetweenActions: [ 5000 ]
        - id: 3
          name: panicked package
          methodsToRun:
-          - name: runAwayFrom
-            parameters: [infected , 50]
-          - name: runAwayFrom
-            parameters: [player, 200 ]
+          - name: updateAgentToRunAwayFrom
+            parameters: [ 50 , infected ]
+            delayBetweenActions: [ 10000 ]
+          - name: runAwayFromSetAgent
+            parameters: null
           
             

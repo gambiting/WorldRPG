@@ -22,16 +22,14 @@ public class Notifier extends Observable implements Runnable{
 		//run until killed
 		while(true)
 		{
-
-
 			synchronized(this)
 			{
 
-				//notify the observers
+				//set the flag on this observable to changed
 				this.setChanged();
+				//notify the observers
 				this.notifyObservers();
 				
-				//Log.d("worldrpg", "hi");
 
 				//sleep for the pre-defined period
 				try {

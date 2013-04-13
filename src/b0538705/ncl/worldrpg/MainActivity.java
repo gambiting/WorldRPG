@@ -152,7 +152,12 @@ public class MainActivity extends Activity {
 			  {
 				  if(((String)msg.obj).equals("location_obtained"))
 				  {
+					  //dismiss the waiting for location dialog
 					  waitingForLocationDialog.dismiss();
+				  }else if(((String)msg.obj).startsWith("debug_print"))
+				  {
+					  Support.debugView.append(((String)msg.obj).substring(11));
+					  Support.debugView.scrollTo(0, Support.debugScroller.getBottom());
 				  }
 			  }
 			};

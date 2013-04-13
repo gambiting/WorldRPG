@@ -3,6 +3,7 @@ package b0538705.ncl.worldrpg;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Currency;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -39,6 +40,10 @@ public class Agent implements Observer {
 	public SpawningLocation parentSpawningLocation;
 
 	public Agent followedAgent=null;
+	
+	public HashMap<String, Long> recentRunTimes;
+	
+	public Agent agentToRunAwayFrom;
 
 	public Agent()
 	{
@@ -48,6 +53,7 @@ public class Agent implements Observer {
 	public Agent(SpawningLocation parent, String State)
 	{
 		actionStack = new ArrayList<ActionPackage>();
+		recentRunTimes = new HashMap<String,Long>();
 		this.parentSpawningLocation = parent;
 		initializePosition();
 
@@ -60,12 +66,15 @@ public class Agent implements Observer {
 		//tempPackage.methodsToRun.add(new ActionMethod("moveAbout", null));
 		//activeActionPackage = tempPackage;
 
-		if(state.equals("normal") || state.equals("panicked"))
+		if(state.equals("normal"))
 		{
 			activeActionPackage = Support.activeScenario.agentTemplate.getActionPackageContainingName("default");
 		}else if(state.equals("infected"))
 		{
 			activeActionPackage = Support.activeScenario.agentTemplate.getActionPackageContainingName("infected");
+		}else if(state.equals("panicked"))
+		{
+			activeActionPackage = Support.activeScenario.agentTemplate.getActionPackageContainingName("panicked");
 		}
 
 		currentSprite = (int)(Math.random()*3.5);
@@ -135,8 +144,12 @@ public class Agent implements Observer {
 		});
 	}
 
-	//run ONLY from main thread, never call directly
-	//updates the map, must be run from the main thread
+	/*
+	 * !!!!!!!!!
+	 * run ONLY from main thread, never call directly!
+	 * updates the map, must be run from the main thread
+	 * !!!!!!!!!
+	 */
 	public void updateMarkerOnMap()
 	{
 		// if marker already exists, remove it
@@ -174,6 +187,9 @@ public class Agent implements Observer {
 	}
 
 
+	/*
+	 * randomly move about
+	 */
 	public void moveAbout()
 	{
 		this.position = Support.transformPositionBy(this.position, Math.random()*4.0-2.0, Math.random()*4.0-2.0);
@@ -181,8 +197,19 @@ public class Agent implements Observer {
 		this.updateMarker();
 
 	}
+	
+	public void infect(Agent agent)
+	{
+		agent.state="infected";
+		agent.activeActionPackage=Support.activeScenario.agentTemplate.getActionPackageContainingName("infected");
+		agent.changed=true;
+		agent.updateMarker();
+	}
 
-	public void followWithinRadius(String state, Integer radius)
+	/*
+	 * follows an agent with a given state, that is within a given radius
+	 */
+	public void followAgentWithinRadius(String state, Integer radius)
 	{
 
 		//check if there is any agent to follow
@@ -209,21 +236,67 @@ public class Agent implements Observer {
 
 		}
 	}
-
-	public void infect(Integer radius)
+	
+	/*
+	 * infects the followed agent if it is closer than the given radius
+	 */
+	public void infectFollowedAgentIfWithinRadius(Integer radius)
 	{
 		//if the infected agent is within 
 		if(followedAgent!=null && Support.distanceBetweenTwoPoints(this.position, followedAgent.position)<radius)
 		{
-			followedAgent.state="infected";
-			followedAgent.activeActionPackage=Support.activeScenario.agentTemplate.getActionPackageContainingName("infected");
-			followedAgent.changed=true;
-			followedAgent.updateMarker();
+			infect(followedAgent);
 			
 			followedAgent=null;
 		}
 	}
+	
+	
+	/*
+	 * infects everyone within certain radius
+	 * run infrequently, since it's expensive to run
+	 */
+	public void infectAllWithinRadius(Integer radius)
+	{
+		for(Agent a:Support.returnAgentsWithinRadius(this.position, radius, "normal", 0))
+		{
+			this.infect(a);
+		}
+	}
+	
+	
+	/*
+	 * updates the agentToRunAwayFrom used to run away by panicking agents
+	 * run infrequently, since the function is expensive to run
+	 */
+	public void updateAgentToRunAwayFrom(Integer radius, String state)
+	{
+		this.agentToRunAwayFrom = Support.returnAgentNearestLocation(this.position, radius, state);
+	}
+	
+	
+	/*
+	 * runs away from the set agentToRunAwayFrom
+	 */
+	public void runAwayFromSetAgent()
+	{
+		if(this.agentToRunAwayFrom!=null)
+		{
+			this.position = Support.transformPositionBy(this.position,
+					(this.position.latitude<agentToRunAwayFrom.position.latitude)?(-1):(1),
+							(this.position.longitude<agentToRunAwayFrom.position.longitude)?(-1):(1));
 
+			this.changed = true;
+			this.updateMarker();
+		}else
+		{
+			//if there is no agent to run away from,then just move randomly
+			this.moveAbout();
+		}
+	}
+	
+
+	//prepares to remove the agent
 	public void cleanUp()
 	{
 
@@ -241,6 +314,9 @@ public class Agent implements Observer {
 
 	}
 
+	/*
+	 * returns an action package that contains a given name
+	 */
 	public ActionPackage getActionPackageContainingName(String name)
 	{
 		for(ActionPackage ap:this.actionStack)
@@ -250,10 +326,15 @@ public class Agent implements Observer {
 				return ap;
 			}
 		}
-
+		//if not found,return null
 		return null;
 	}
 
+	/*
+	 * update method called by the observable thread
+	 * (non-Javadoc)
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
 	@Override
 	public void update(Observable observable, Object data) {
 
@@ -275,10 +356,26 @@ public class Agent implements Observer {
 					}
 				}
 
-				//get that method
+				//get the method with given name and specify the classes of the parameters
 				Method method = agentClass.getMethod(am.name, par);
 
-				method.invoke(this, (Object[])am.parameters);
+				//check if there is a record of running this method for the last time
+				if(this.recentRunTimes.containsKey(am.name))
+				{
+					//check the delay, invoke only if the time since the last one is longer than the specified delay
+					if((System.currentTimeMillis() - (long)this.recentRunTimes.get(am.name)) > am.delayBetweenActions)
+					{
+						//update the map
+						this.recentRunTimes.put(am.name, System.currentTimeMillis());
+						//invoke the method
+						method.invoke(this, (Object[])am.parameters);
+					}
+				}else
+				{
+					this.recentRunTimes.put(am.name, System.currentTimeMillis());
+					method.invoke(this, (Object[])am.parameters);
+				}
+				
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

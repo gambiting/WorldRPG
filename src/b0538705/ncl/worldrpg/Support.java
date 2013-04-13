@@ -9,6 +9,7 @@ import org.apache.http.util.LangUtils;
 
 import android.content.Context;
 import android.location.Location;
+import android.os.Message;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ScrollView;
@@ -108,8 +109,10 @@ public class Support {
 
 	public static void printDebug(String source, String message)
 	{
-		Support.debugView.append(source + " - " + message + "\n");
-		Support.debugScroller.smoothScrollTo(0, Support.debugView.getBottom());
+		//send the message to the main thread
+		Message msg = MainActivity.mainHandler.obtainMessage(1, "debug_print" + source + " - " + message + "\n");
+		MainActivity.mainHandler.dispatchMessage(msg);
+		
 
 		Log.d(source, message);
 	}
@@ -180,5 +183,31 @@ public class Support {
 		}
 		
 		return tempAgents;
+	}
+	
+	public static Agent returnAgentNearestLocation(LatLng origin, double radius, String state)
+	{
+		Agent tempAgent=null;
+		for(SpawningLocation sl:Support.activeSpawningLocations)
+		{
+			for(Agent a:sl.activeAgents)
+			{
+				if(a.state.equals(state) && Support.distanceBetweenTwoPoints(origin, a.position) < radius)
+				{
+					//if there is no tempAgent at all, then use the first one found
+					if(tempAgent==null)
+					{
+						tempAgent=a;
+					}else if(Support.distanceBetweenTwoPoints(origin, tempAgent.position) > Support.distanceBetweenTwoPoints(origin, a.position))
+					{
+						//if the currently examined agent is closer, use that agent
+						tempAgent=a;
+					}
+					
+				}
+			}
+		}
+		
+		return tempAgent;
 	}
 }

@@ -199,11 +199,14 @@ public class Agent implements Observer {
 		}else
 		{
 			//if not, then find one to follow
-			try {
-				followedAgent=Support.returnAgentsWithinRadius(this.position, radius, state, 1).take();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			followedAgent=Support.returnAgentsWithinRadius(this.position, radius, state, 1).poll();
+			
+			//if there aren't any agents fulfilling the criteria,then move about randomly
+			if(followedAgent==null)
+			{
+				this.moveAbout();
 			}
+
 		}
 	}
 

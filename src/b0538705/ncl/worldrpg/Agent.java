@@ -39,11 +39,11 @@ public class Agent implements Observer {
 
 	public SpawningLocation parentSpawningLocation;
 
-	public Agent followedAgent=null;
 	
 	public HashMap<String, Long> recentRunTimes;
 	
 	public Agent agentToRunAwayFrom;
+	public Agent agentToFollow;
 
 	public Agent()
 	{
@@ -205,6 +205,14 @@ public class Agent implements Observer {
 		agent.changed=true;
 		agent.updateMarker();
 	}
+	
+	/*
+	 * finds a nearest agent with a given state and within a given radius to follow
+	 */
+	public void updateAgentToFollow(Integer radius, String state)
+	{
+		this.agentToFollow = Support.returnAgentNearestLocation(this.position, radius, state);
+	}
 
 	/*
 	 * follows an agent with a given state, that is within a given radius
@@ -213,26 +221,20 @@ public class Agent implements Observer {
 	{
 
 		//check if there is any agent to follow
-		if(followedAgent!=null)
+		if(agentToFollow!=null)
 		{
 			//if yes, move closer
 			this.position = Support.transformPositionBy(this.position,
-					(this.position.latitude>followedAgent.position.latitude)?(-1):(1),
-							(this.position.longitude>followedAgent.position.longitude)?(-1):(1));
+					(this.position.latitude>agentToFollow.position.latitude)?(-1):(1),
+							(this.position.longitude>agentToFollow.position.longitude)?(-1):(1));
 
 			this.changed = true;
 			this.updateMarker();
 
 		}else
 		{
-			//if not, then find one to follow
-			followedAgent=Support.returnAgentsWithinRadius(this.position, radius, state, 1).poll();
-			
-			//if there aren't any agents fulfilling the criteria,then move about randomly
-			if(followedAgent==null)
-			{
-				this.moveAbout();
-			}
+			//if there isn't an agent to follow, move randomly
+			this.moveAbout();
 
 		}
 	}
@@ -243,11 +245,11 @@ public class Agent implements Observer {
 	public void infectFollowedAgentIfWithinRadius(Integer radius)
 	{
 		//if the infected agent is within 
-		if(followedAgent!=null && Support.distanceBetweenTwoPoints(this.position, followedAgent.position)<radius)
+		if(agentToFollow!=null && Support.distanceBetweenTwoPoints(this.position, agentToFollow.position)<radius)
 		{
-			infect(followedAgent);
+			infect(agentToFollow);
 			
-			followedAgent=null;
+			agentToFollow=null;
 		}
 	}
 	

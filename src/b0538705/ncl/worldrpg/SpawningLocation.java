@@ -59,6 +59,7 @@ public class SpawningLocation {
 		{
 			Agent tempAgent = new Agent(this, "normal");
 			tempAgent.useSprites(Agent.animationSpritesNormal);
+			tempAgent.parentSpawningLocation = this;
 			this.activeAgents.add(tempAgent);
 		}
 
@@ -67,6 +68,7 @@ public class SpawningLocation {
 		{
 			Agent tempAgent = new Agent(this, "infected");
 			tempAgent.useSprites(Agent.animationSpritesInfected);
+			tempAgent.parentSpawningLocation = this;
 			this.activeAgents.add(tempAgent);
 		}
 
@@ -75,6 +77,7 @@ public class SpawningLocation {
 		{
 			Agent tempAgent = new Agent(this, "panicked");
 			tempAgent.useSprites(Agent.animationSpritesPanicked);
+			tempAgent.parentSpawningLocation = this;
 			this.activeAgents.add(tempAgent);
 		}
 
@@ -83,6 +86,31 @@ public class SpawningLocation {
 
 		//DEBUG
 		this.addDebugLines();
+	}
+	
+	/*
+	 * updates the count of each agent type for this spawning location
+	 */
+	public void updateAgentsCount()
+	{
+		int normalTemp=0, infectedTemp=0, panickedTemp=0;
+		for(Agent a:this.activeAgents)
+		{
+			if(a.state.equals("normal"))
+			{
+				normalTemp++;
+			}else if(a.state.equals("infected"))
+			{
+				infectedTemp++;
+			}else if(a.state.equals("panicked"))
+			{
+				panickedTemp++;
+			}
+		}
+		
+		this.normal = normalTemp;
+		this.infected = infectedTemp;
+		this.panicked = panickedTemp;
 	}
 
 	public void cleanUp()

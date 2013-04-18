@@ -16,8 +16,6 @@ agentTemplate:
          methodsToRun:
           - name: moveAbout
             parameters: null
-          #- name: followAgentWithinRadius
-          #  parameters: [ normal , 50 ]
           - name: infectAllWithinRadius
             parameters: [ 5 ]
             delayBetweenActions: [ 5000 ]

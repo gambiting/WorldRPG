@@ -45,16 +45,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-	private GoogleMap mMap;
 
-	private MarkerOptions mr;
-
-	private Marker marker;
-
-	private MarkerOptions playerMarkerOptions;
-	private Marker playerMarker;
-
-	private BitmapDescriptor playerImage;
 	
 	public static Handler mainHandler;
 
@@ -110,20 +101,13 @@ public class MainActivity extends Activity {
 		Button centreOnPlayerButton = (Button) findViewById(R.id.centreOnPlayerButton);
 		centreOnPlayerButton.setOnClickListener(new centreOnPlayerClickListener());
 
-		playerImage = BitmapDescriptorFactory.fromResource(R.drawable.player);
+		
 
-		mr = new MarkerOptions().position(new LatLng(0, 0));
-
-
-		marker = MapHandler.mMap.addMarker(mr);
 
 		
 		//Player.instance.position.latitude = 
 		
 		
-		playerMarkerOptions = new MarkerOptions().icon(playerImage);
-		playerMarkerOptions.position(new LatLng(0, 0));
-		playerMarker = MapHandler.mMap.addMarker(playerMarkerOptions);
 
 
 
@@ -223,9 +207,7 @@ public class MainActivity extends Activity {
 				
 				Player.instance.locationUpdate(Support.locationToLatLng(location));
 				
-				playerMarker.remove();
-				playerMarkerOptions.position(latLng);
-				playerMarker = MapHandler.mMap.addMarker(playerMarkerOptions);
+				
 				
 				
 				Message msg = MainActivity.mainHandler.obtainMessage(1, "location_obtained");

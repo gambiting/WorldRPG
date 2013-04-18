@@ -105,6 +105,10 @@ public class Support {
 		Agent.animationSpritesPanicked.add(BitmapDescriptorFactory.fromResource(R.drawable.npc_3_1));
 		Agent.animationSpritesPanicked.add(BitmapDescriptorFactory.fromResource(R.drawable.npc_3_2));
 		Agent.animationSpritesPanicked.add(BitmapDescriptorFactory.fromResource(R.drawable.npc_3_3));
+		
+		//player icon
+		
+		Player.playerIcon = BitmapDescriptorFactory.fromResource(R.drawable.player_girl);
 	}
 
 	public static void printDebug(String source, String message)

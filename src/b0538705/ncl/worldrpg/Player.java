@@ -1,5 +1,10 @@
 package b0538705.ncl.worldrpg;
 
+import android.graphics.Color;
+
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -10,11 +15,20 @@ public class Player {
 	
 	public static Player instance;
 	
+	public static BitmapDescriptor playerIcon;
+	
 	private MarkerOptions markerOptions;
 	private Marker marker;
 	
+	private Circle circle;
+	private int circleFill;
+	private int circleOutline;
+	public int range=30;
+	
 	public Player()
 	{
+		circleFill = Color.argb(80, 102, 204, 255);
+		circleOutline = Color.argb(200, 40, 40, 255);
 		
 	}
 	
@@ -29,6 +43,8 @@ public class Player {
 		 * xxx
 		 * xxx
 		 */
+		
+		//middle point,at the player's location
 		Support.databaseEngine.addPointToDatabase(location);
 		
 		
@@ -64,6 +80,25 @@ public class Player {
 		//eight - bottom right corner
 		tempLocation = new LatLng(location.latitude+latOffset, location.longitude+lonOffset);
 		Support.databaseEngine.addPointToDatabase(tempLocation);
+		
+		if(circle!=null)
+			circle.remove();
+		
+		//add the circle for the range
+		circle = MapHandler.mMap.addCircle(new CircleOptions().center(location)
+				.fillColor(circleFill)
+				.strokeColor(circleOutline)
+				.radius(range));
+		
+		
+		//add the marker for the player
+		if(marker!= null)
+			marker.remove();
+		
+		markerOptions = new MarkerOptions().position(location)
+				.icon(Player.playerIcon)
+				.anchor(0.5f, 0.5f);
+		marker = MapHandler.mMap.addMarker(markerOptions);
 		
 	}
 	

@@ -204,6 +204,9 @@ public class Agent implements Observer {
 		agent.activeActionPackage=Support.activeScenario.agentTemplate.getActionPackageContainingName("infected");
 		agent.changed=true;
 		agent.updateMarker();
+		
+		//update the count on the spawning location
+		parentSpawningLocation.updateAgentsCount();
 	}
 	
 	/*
@@ -217,7 +220,7 @@ public class Agent implements Observer {
 	/*
 	 * follows an agent with a given state, that is within a given radius
 	 */
-	public void followAgentWithinRadius(String state, Integer radius)
+	public void followSetAgent()
 	{
 
 		//check if there is any agent to follow

@@ -68,7 +68,7 @@ public class Agent implements Observer {
 
 		if(state.equals("normal"))
 		{
-			activeActionPackage = Support.activeScenario.agentTemplate.getActionPackageContainingName("default");
+			activeActionPackage = Support.activeScenario.agentTemplate.getActionPackageContainingName("normal");
 		}else if(state.equals("infected"))
 		{
 			activeActionPackage = Support.activeScenario.agentTemplate.getActionPackageContainingName("infected");
@@ -198,6 +198,42 @@ public class Agent implements Observer {
 
 	}
 	
+	/*
+	 * heals itself
+	 */
+	public void healItself()
+	{
+		this.heal(this);
+	}
+	
+	/*
+	 * heals an agent from any other state(returns to normal)
+	 */
+	public void heal(Agent agent)
+	{
+		agent.state="normal";
+		agent.activeActionPackage=Support.activeScenario.agentTemplate.getActionPackageContainingName("normal");
+		agent.changed=true;
+		agent.updateMarker();
+		
+		// update the count on the spawning location
+		parentSpawningLocation.updateAgentsCount();
+	}
+	
+	/*
+	 * heals all agents within given radius
+	 */
+	public void healEveryoneWithinRadius( Integer radius)
+	{
+		for(Agent a: Support.returnAgentsWithinRadius(this.position, radius, "any", 0))
+		{
+			a.healItself();
+		}
+	}
+	
+	/*
+	 * infects a given agent
+	 */
 	public void infect(Agent agent)
 	{
 		agent.state="infected";

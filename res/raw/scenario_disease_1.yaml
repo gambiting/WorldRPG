@@ -7,7 +7,7 @@ spawningLocationWidth: 50
 agentTemplate:
     actionStack:
        - id: 1
-         name: default package
+         name: normal package
          methodsToRun:
           - name: moveAbout
             parameters: null

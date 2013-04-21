@@ -32,12 +32,94 @@
 	   />
 	</ScrollView>
 	
-	<Button
-	    android:id="@+id/centreOnPlayerButton"
+	
+	
+	<LinearLayout 
+	    android:id="@+id/info_layout"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentBottom="true"
+	    android:layout_alignParentRight="true"
+	    android:orientation="vertical"
+	    android:background="#99000000"
+	    android:padding="5dp">
+		<LinearLayout 
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal"
+		    android:padding="5dp"
+		    >
+		    <TextView 
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="Normal"
+		        android:textColor="#FFFFFF"
+		        android:textSize="12sp"
+		        android:layout_weight="0.9"/>
+		    <ImageView 
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/npc_1_1"
+		        android:layout_weight="0.1"/>
+		    
+		</LinearLayout>
+		<LinearLayout 
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal"
+		    android:padding="5dp"
+		    >
+		    <TextView 
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="Infected"
+		        android:textColor="#FFFFFF"
+		        android:textSize="12sp"
+		        android:layout_weight="0.9"/>
+		    <ImageView 
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/npc_2_1"
+		        android:layout_weight="0.1"/>
+		    
+		</LinearLayout>
+		<LinearLayout 
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal"
+		    android:padding="5dp"
+		    >
+		    <TextView 
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="Panicked"
+		        android:textColor="#FFFFFF"
+		        android:textSize="12sp"
+		        android:layout_weight="0.9"/>
+		    <ImageView 
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/npc_3_1"
+		        android:layout_weight="0.1"/>
+		    
+		</LinearLayout>
+	    
+	</LinearLayout>
+	
+	<RelativeLayout
+	    android:id="@+id/status_layout"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_toLeftOf="@id/info_layout"
+	    android:background="#99000000" >
+
+	    <Button
+	    android:id="@+id/centreOnPlayerButton"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
-	    android:layout_margin="10dp"
+	    android:layout_margin="5dp"
 	    android:text="Center on Player"/>
+	</RelativeLayout>
 </RelativeLayout>

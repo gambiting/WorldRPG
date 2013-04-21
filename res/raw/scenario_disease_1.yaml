@@ -4,6 +4,7 @@ normal  : 10
 infected: 3
 panicked: 2
 spawningLocationWidth: 50
+diseaseTimeLimit: 30
 agentTemplate:
     actionStack:
        - id: 1
@@ -19,6 +20,8 @@ agentTemplate:
           - name: infectAllWithinRadius
             parameters: [ 5 ]
             delayBetweenActions: [ 5000 ]
+          - name: checkIfInfectionEnded
+            parameters: null
        - id: 3
          name: panicked package
          methodsToRun:

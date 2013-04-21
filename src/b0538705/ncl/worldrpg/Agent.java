@@ -32,6 +32,8 @@ public class Agent implements Observer {
 	public boolean changed=false;
 
 	public String state;
+	
+	public long infectionTime; //system time at the time of infection
 
 	public ArrayList<BitmapDescriptor> animationSprites;
 
@@ -199,6 +201,19 @@ public class Agent implements Observer {
 	}
 	
 	/*
+	 * heal if the disease ended naturally
+	 */
+	public void checkIfInfectionEnded()
+	{
+		//check the time difference between the time of infection and current time
+		//if it's longer than the diseaseTimeLimit, heal the agent
+		if((System.currentTimeMillis()-this.infectionTime) > Support.activeScenario.diseaseTimeLimit*1000)
+		{
+			this.healItself();
+		}
+	}
+	
+	/*
 	 * heals itself
 	 */
 	public void healItself()
@@ -237,6 +252,7 @@ public class Agent implements Observer {
 	public void infect(Agent agent)
 	{
 		agent.state="infected";
+		agent.infectionTime=System.currentTimeMillis();
 		agent.activeActionPackage=Support.activeScenario.agentTemplate.getActionPackageContainingName("infected");
 		agent.changed=true;
 		agent.updateMarker();
@@ -390,20 +406,23 @@ public class Agent implements Observer {
 				//get the parameter classes
 				if(am.parameters!=null && am.parameters.length > 0)
 				{
+					//make a new array for the parameter classes
 					par = new Class[am.parameters.length];
+					//fill the array with all the parameter classes
 					for(int i=0;i<am.parameters.length;i++)
 					{
 						par[i] = am.parameters[i].getClass();
 					}
 				}
 
-				//get the method with given name and specify the classes of the parameters
+				//get the method with given name and specify the classes of the parameters(if method does not take any
+				//parameters,then par=null
 				Method method = agentClass.getMethod(am.name, par);
 
 				//check if there is a record of running this method for the last time
 				if(this.recentRunTimes.containsKey(am.name))
 				{
-					//check the delay, invoke only if the time since the last one is longer than the specified delay
+					//check the delay, invoke only if the time since the last run is longer than the specified delay
 					if((System.currentTimeMillis() - (long)this.recentRunTimes.get(am.name)) > am.delayBetweenActions)
 					{
 						//update the map

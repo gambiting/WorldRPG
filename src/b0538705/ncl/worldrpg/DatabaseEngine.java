@@ -21,6 +21,9 @@ public class DatabaseEngine {
 		DatabaseEngine.localDatabase = new LocalDatabase(context);
 	}
 	
+	/*
+	 * adds a new point to the database
+	 */
 	public boolean addPointToDatabase(LatLng location)
 	{
 		if(!areAnyPointsWithinRange(location))
@@ -49,6 +52,9 @@ public class DatabaseEngine {
 		return false;
 	}
 	
+	/*
+	 * updates the spawning point entry in the database
+	 */
 	public void updatePointInTheDatabase(SpawningLocation sl)
 	{
 		//update the given location
@@ -66,6 +72,9 @@ public class DatabaseEngine {
 		db.close();
 	}
 	
+	/*
+	 * returns true if there are already points within the SpawningLocation range(defined in the scenario)
+	 */
 	public boolean areAnyPointsWithinRange(LatLng location)
 	{
 		

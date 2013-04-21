@@ -69,6 +69,7 @@ public class SpawningLocation {
 			Agent tempAgent = new Agent(this, "infected");
 			tempAgent.useSprites(Agent.animationSpritesInfected);
 			tempAgent.parentSpawningLocation = this;
+			tempAgent.infectionTime = System.currentTimeMillis();
 			this.activeAgents.add(tempAgent);
 		}
 

@@ -16,11 +16,13 @@ public class Scenario  {
 	//width(and height) of the spawning location, in meters
 	public int spawningLocationWidth = 50;
 	
+	public ArrayList<Item> availableItems;
+	
 	public Agent agentTemplate;
 	
 	public Scenario()
 	{
-		//TODO yaml file loading
+		availableItems = new ArrayList<Item>();
 	}
 
 

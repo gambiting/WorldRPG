@@ -206,7 +206,7 @@ public class Agent implements Observer {
 	public void checkIfInfectionEnded()
 	{
 		//check the time difference between the time of infection and current time
-		//if it's longer than the diseaseTimeLimit, heal the agent
+		//if it's longer than the diseaseTimeLimit, heal the agent	
 		if((System.currentTimeMillis()-this.infectionTime) > Support.activeScenario.diseaseTimeLimit*1000)
 		{
 			this.healItself();

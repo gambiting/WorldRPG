@@ -30,5 +30,12 @@ agentTemplate:
             delayBetweenActions: [ 10000 ]
           - name: runAwayFromSetAgent
             parameters: null
+availableItems:
+  - name: Medical Supplies
+    playerCompatible: true
+    agentCompatible: true
+    methodsToRun:
+      - name: heal
+        parameters: [ 100 ]
           
             

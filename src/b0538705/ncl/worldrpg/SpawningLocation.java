@@ -95,6 +95,10 @@ public class SpawningLocation {
 	public void updateAgentsCount()
 	{
 		int normalTemp=0, infectedTemp=0, panickedTemp=0;
+		
+		/*
+		 * count each agent type
+		 */
 		for(Agent a:this.activeAgents)
 		{
 			if(a.state.equals("normal"))

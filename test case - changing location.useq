@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence-diagram version="1.1.2" icons="true" automaticImage="PNG">  
+  <object id="1" language="java" name="b0538705.ncl.worldrpg.MainActivity.myLocationListener" project="WorldRPG" 
+    file="/WorldRPG/src/b0538705/ncl/worldrpg/MainActivity.java" binary="false" label="myLocationListener" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="381" y="0"/>    
+    <execution id="2">      
+      <position height="63" width="160" x="122" y="134"/>    
+    </execution>  
+  </object>  
+  <object id="5" language="java" name="b0538705.ncl.worldrpg.Player" project="WorldRPG" 
+    file="/WorldRPG/src/b0538705/ncl/worldrpg/Player.java" binary="false" label="player" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="163" y="0"/>    
+    <execution id="4">      
+      <position height="21" width="113" x="286" y="155"/>    
+    </execution>    
+    <execution id="6">      
+      <position height="63" width="113" x="286" y="235"/>    
+    </execution>  
+  </object>  
+  <object id="9" language="java" name="b0538705.ncl.worldrpg.DatabaseEngine" project="WorldRPG" 
+    file="/WorldRPG/src/b0538705/ncl/worldrpg/DatabaseEngine.java" binary="false" label="databaseEngine" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="618" y="0"/>    
+    <execution id="10">      
+      <position height="63" width="135" x="403" y="341"/>    
+    </execution>    
+    <execution id="8">      
+      <position height="21" width="135" x="403" y="256"/>    
+    </execution>  
+  </object>  
+  <object id="13" language="java" name="b0538705.ncl.worldrpg.LocalDatabase" project="WorldRPG" 
+    file="/WorldRPG/src/b0538705/ncl/worldrpg/LocalDatabase.java" binary="false" label="localDatabase1" type="class" 
+    autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="12">      
+      <position height="21" width="0" x="0" y="362"/>    
+    </execution>  
+  </object>  
+  <message id="3" operation="onLocationChanged(android.location.Location):void">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="4"/>  
+  </message>  
+  <message id="7" operation="areAnyPointsWithinRange(com.google.android.gms.maps.model.LatLng):boolean">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="8"/>  
+  </message>  
+  <message id="11" operation="onCreate(android.database.sqlite.SQLiteDatabase):void">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="12"/>  
+  </message>
+</sequence-diagram>

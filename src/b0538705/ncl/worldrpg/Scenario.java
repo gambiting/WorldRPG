@@ -16,13 +16,14 @@ public class Scenario  {
 	//width(and height) of the spawning location, in meters
 	public int spawningLocationWidth = 50;
 	
-	public ArrayList<Item> availableItems;
+	public ArrayList<Item> itemTemplates;
 	
 	public Agent agentTemplate;
 	
+	
 	public Scenario()
 	{
-		availableItems = new ArrayList<Item>();
+		itemTemplates = new ArrayList<Item>();
 	}
 
 

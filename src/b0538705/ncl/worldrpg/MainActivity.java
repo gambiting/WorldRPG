@@ -39,6 +39,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +59,7 @@ public class MainActivity extends Activity {
 		
 		Support.currentContext = getApplicationContext();
 		
+		Support.currentActivity = this;
 		
 		Support.initializeGeneral();
 		
@@ -101,7 +104,7 @@ public class MainActivity extends Activity {
 		Button centreOnPlayerButton = (Button) findViewById(R.id.centreOnPlayerButton);
 		centreOnPlayerButton.setOnClickListener(new centreOnPlayerClickListener());
 
-		
+		Support.debugScroller.setVisibility(View.INVISIBLE);
 
 
 		

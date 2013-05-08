@@ -27,12 +27,12 @@ public class Agent implements Observer {
 	public ActionPackage activeActionPackage;
 
 	private MarkerOptions markerOptions;
-	private Marker marker;
+	public Marker marker;
 
 	public boolean changed=false;
 
 	public String state;
-	
+
 	public long infectionTime; //system time at the time of infection
 
 	public ArrayList<BitmapDescriptor> animationSprites;
@@ -41,9 +41,9 @@ public class Agent implements Observer {
 
 	public SpawningLocation parentSpawningLocation;
 
-	
+
 	public HashMap<String, Long> recentRunTimes;
-	
+
 	public Agent agentToRunAwayFrom;
 	public Agent agentToFollow;
 
@@ -162,6 +162,12 @@ public class Agent implements Observer {
 
 		markerOptions = new MarkerOptions().position(this.position);
 
+		markerOptions.title("Agent");
+
+		String tempSnippet = "Current status: " + this.state;
+
+		markerOptions.snippet(tempSnippet);
+
 
 		//cycle through the animation sprites if there are any
 		//if there is none, the default Google Marker icon will be used
@@ -199,7 +205,7 @@ public class Agent implements Observer {
 		this.updateMarker();
 
 	}
-	
+
 	/*
 	 * heal if the disease ended naturally
 	 */
@@ -212,7 +218,7 @@ public class Agent implements Observer {
 			this.healItself();
 		}
 	}
-	
+
 	/*
 	 * heals itself
 	 */
@@ -220,7 +226,7 @@ public class Agent implements Observer {
 	{
 		this.heal(this);
 	}
-	
+
 	/*
 	 * heals an agent from any other state(returns to normal)
 	 */
@@ -230,11 +236,11 @@ public class Agent implements Observer {
 		agent.activeActionPackage=Support.activeScenario.agentTemplate.getActionPackageContainingName("normal");
 		agent.changed=true;
 		agent.updateMarker();
-		
+
 		// update the count on the spawning location
 		parentSpawningLocation.updateAgentsCount();
 	}
-	
+
 	/*
 	 * heals all agents within given radius
 	 */
@@ -245,7 +251,7 @@ public class Agent implements Observer {
 			a.healItself();
 		}
 	}
-	
+
 	/*
 	 * infects a given agent
 	 */
@@ -256,11 +262,11 @@ public class Agent implements Observer {
 		agent.activeActionPackage=Support.activeScenario.agentTemplate.getActionPackageContainingName("infected");
 		agent.changed=true;
 		agent.updateMarker();
-		
+
 		//update the count on the spawning location
 		parentSpawningLocation.updateAgentsCount();
 	}
-	
+
 	/*
 	 * finds a nearest agent with a given state and within a given radius to follow
 	 */
@@ -293,7 +299,7 @@ public class Agent implements Observer {
 
 		}
 	}
-	
+
 	/*
 	 * infects the followed agent if it is closer than the given radius
 	 */
@@ -303,12 +309,23 @@ public class Agent implements Observer {
 		if(agentToFollow!=null && Support.distanceBetweenTwoPoints(this.position, agentToFollow.position)<radius)
 		{
 			infect(agentToFollow);
-			
+
 			agentToFollow=null;
 		}
 	}
 	
-	
+	/*
+	 * randomly becomes infected
+	 */
+	public void catchInfectionRandomly( Double chance)
+	{
+		if(Math.random()< chance)
+		{
+			infect(this);
+		}
+	}
+
+
 	/*
 	 * infects everyone within certain radius
 	 * run infrequently, since it's expensive to run
@@ -320,8 +337,56 @@ public class Agent implements Observer {
 			this.infect(a);
 		}
 	}
-	
-	
+
+
+	/*
+	 * panics if there is an infected agent nearby
+	 * run infrequently due to use of returnAgentNearestLocation
+	 */
+	public void panicIfCloseToInfected(Integer radius)
+	{
+		//try getting an infected agent 
+		this.agentToRunAwayFrom = Support.returnAgentNearestLocation(this.position, radius, "infected");
+
+		//panic if there is one. Don't panic if there isn't one
+		if(this.agentToRunAwayFrom!=null)
+		{
+			panic(this);
+		}
+	}
+
+
+	/*
+	 * panicked agent becomes normal if there are no infected agents within radius
+	 */
+	public void calmDownIfNoInfectedWithinRadius(Integer radius)
+	{
+		//try getting an infected agent 
+		this.agentToRunAwayFrom = Support.returnAgentNearestLocation(this.position, radius, "infected");
+		if(this.agentToRunAwayFrom==null)
+		{
+			this.healItself();
+		}
+		
+	}
+
+	/*
+	 * makes an agent panic
+	 */
+	public void panic(Agent agent)
+	{
+		agent.state="panicked";
+
+		agent.activeActionPackage=Support.activeScenario.agentTemplate.getActionPackageContainingName("panicked");
+		agent.changed=true;
+		agent.updateMarker();
+
+		//update the count on the spawning location
+		parentSpawningLocation.updateAgentsCount();
+	}
+
+
+
 	/*
 	 * updates the agentToRunAwayFrom used to run away by panicking agents
 	 * run infrequently, since the function is expensive to run
@@ -330,8 +395,8 @@ public class Agent implements Observer {
 	{
 		this.agentToRunAwayFrom = Support.returnAgentNearestLocation(this.position, radius, state);
 	}
-	
-	
+
+
 	/*
 	 * runs away from the set agentToRunAwayFrom
 	 */
@@ -351,7 +416,7 @@ public class Agent implements Observer {
 			this.moveAbout();
 		}
 	}
-	
+
 
 	//prepares to remove the agent
 	public void cleanUp()
@@ -435,7 +500,7 @@ public class Agent implements Observer {
 					this.recentRunTimes.put(am.name, System.currentTimeMillis());
 					method.invoke(this, (Object[])am.parameters);
 				}
-				
+
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

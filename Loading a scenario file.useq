@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence-diagram version="1.1.2" icons="true" automaticImage="PNG">  
+  <object id="1" language="java" name="b0538705.ncl.worldrpg.MainActivity" project="WorldRPG" 
+    file="/WorldRPG/src/b0538705/ncl/worldrpg/MainActivity.java" binary="false" label="mainActivity" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="331" y="0"/>    
+    <execution id="2">      
+      <position height="63" width="113" x="5" y="122"/>    
+    </execution>  
+  </object>  
+  <object id="5" language="java" name="b0538705.ncl.worldrpg.Support" project="WorldRPG" 
+    file="/WorldRPG/src/b0538705/ncl/worldrpg/Support.java" binary="false" label="support" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="456" y="0"/>    
+    <execution id="4">      
+      <position height="21" width="113" x="122" y="143"/>    
+    </execution>    
+    <execution id="6">      
+      <position height="105" width="113" x="122" y="215"/>    
+    </execution>    
+    <execution id="9">      
+      <position height="21" width="7" x="175" y="257"/>    
+    </execution>  
+  </object>  
+  <object id="10" language="java" name="b0538705.ncl.worldrpg.YamlHandler" project="WorldRPG" 
+    file="/WorldRPG/src/b0538705/ncl/worldrpg/YamlHandler.java" binary="false" label="yamlHandler" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="317" y="0"/>    
+    <execution id="8">      
+      <position height="63" width="113" x="239" y="236"/>    
+    </execution>  
+  </object>  
+  <message id="3" operation="initializeGeneral():void">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="4"/>  
+  </message>  
+  <message id="7" operation="loadScenario(java.io.InputStream):b0538705.ncl.worldrpg.Scenario">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="8"/>  
+  </message>  
+  <message id="11">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="9"/>  
+  </message>
+</sequence-diagram>

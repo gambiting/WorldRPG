@@ -7,6 +7,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.http.util.LangUtils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.os.Message;
@@ -27,6 +28,8 @@ public class Support {
 	public static Scenario activeScenario;
 
 	public static Context currentContext;
+	
+	public static Activity currentActivity;
 
 	public static DatabaseEngine databaseEngine;
 
@@ -37,7 +40,7 @@ public class Support {
 
 
 	//update frequency in seconds
-	public static int agentsUpdateFrequency=1000;
+	public static int agentsUpdateFrequency=500;
 
 	public static LatLng locationToLatLng(Location l)
 	{
@@ -187,6 +190,27 @@ public class Support {
 		}
 		
 		return tempAgents;
+	}
+	
+	/*
+	 * returns all items within the given radius
+	 */
+	public static BlockingQueue<Item> returnItemsWithinRadius(LatLng origin, double radius)
+	{
+		BlockingQueue<Item> tempItems = new LinkedBlockingQueue<Item>();
+		
+		for(SpawningLocation sl: Support.activeSpawningLocations)
+		{
+			for(Item i: sl.activeItems)
+			{
+				if((Support.distanceBetweenTwoPoints(origin, i.position)<radius))
+				{
+					tempItems.add(i);
+				}
+			}
+		}
+		
+		return tempItems;
 	}
 	
 	public static Agent returnAgentNearestLocation(LatLng origin, double radius, String state)

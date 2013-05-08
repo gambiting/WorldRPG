@@ -23,6 +23,8 @@ public class SpawningLocation {
 
 	public BlockingQueue<Polygon> activePolygons;
 
+	public BlockingQueue<Item> activeItems;
+
 	public SpawningLocation(long ID,LatLng pos)
 	{
 		this.id = ID;
@@ -53,6 +55,7 @@ public class SpawningLocation {
 	{
 		this.activeAgents = new LinkedBlockingQueue<Agent>();
 		this.activePolygons = new LinkedBlockingQueue<Polygon>();
+		this.activeItems = new LinkedBlockingQueue<Item>();
 
 		//add the number of normal agents
 		for(int i=0;i<this.normal;i++)
@@ -63,7 +66,7 @@ public class SpawningLocation {
 			this.activeAgents.add(tempAgent);
 		}
 
-		//add the number of normal agents
+		//add the number of infected agents
 		for(int i=0;i<this.infected;i++)
 		{
 			Agent tempAgent = new Agent(this, "infected");
@@ -73,7 +76,7 @@ public class SpawningLocation {
 			this.activeAgents.add(tempAgent);
 		}
 
-		//add the number of normal agents
+		//add the number of panicked agents
 		for(int i=0;i<this.panicked;i++)
 		{
 			Agent tempAgent = new Agent(this, "panicked");
@@ -82,20 +85,38 @@ public class SpawningLocation {
 			this.activeAgents.add(tempAgent);
 		}
 
+		for(Item i:Support.activeScenario.itemTemplates)
+		{
+
+			for(int j=0;j<i.numberPerSpawningLocation;j++)
+			{
+				Item tempItem = new Item(this, i);
+
+				
+
+				this.activeItems.add(tempItem);
+
+				//used to compensate for the fact that the item might not have been added to the list of active items yet
+				tempItem.changed = true;
+				tempItem.updateMarker();
+			}
+		}
+
+
 
 
 
 		//DEBUG
-		this.addDebugLines();
+		//this.addDebugLines();
 	}
-	
+
 	/*
 	 * updates the count of each agent type for this spawning location
 	 */
 	public void updateAgentsCount()
 	{
 		int normalTemp=0, infectedTemp=0, panickedTemp=0;
-		
+
 		/*
 		 * count each agent type
 		 */
@@ -112,7 +133,7 @@ public class SpawningLocation {
 				panickedTemp++;
 			}
 		}
-		
+
 		this.normal = normalTemp;
 		this.infected = infectedTemp;
 		this.panicked = panickedTemp;
@@ -131,8 +152,8 @@ public class SpawningLocation {
 		{
 			p.remove();
 		}
-		
-		
+
+
 		//update the database
 		Support.databaseEngine.updatePointInTheDatabase(this);
 	}

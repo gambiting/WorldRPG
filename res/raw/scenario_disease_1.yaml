@@ -1,10 +1,10 @@
 scenario: 1
 name    : Disease Outbreak 1
 normal  : 10
-infected: 3
+infected: 0
 panicked: 2
 spawningLocationWidth: 50
-diseaseTimeLimit: 30
+diseaseTimeLimit: 20
 agentTemplate:
     actionStack:
        - id: 1
@@ -12,28 +12,41 @@ agentTemplate:
          methodsToRun:
           - name: moveAbout
             parameters: null
+          - name: panicIfCloseToInfected
+            parameters: [ 30 ]
+            delayBetweenActions: [ 10000 ]
+          - name: catchInfectionRandomly
+            parameters: [ 0.01 ]
+            delayBetweenActions: [ 30000 ]
        - id: 2
          name: infected package
          methodsToRun:
           - name: moveAbout
             parameters: null
           - name: infectAllWithinRadius
-            parameters: [ 5 ]
+            parameters: [ 30 ]
             delayBetweenActions: [ 5000 ]
           - name: checkIfInfectionEnded
             parameters: null
        - id: 3
          name: panicked package
          methodsToRun:
-          - name: updateAgentToRunAwayFrom
-            parameters: [ 50 , infected ]
+          - name: calmDownIfNoInfectedWithinRadius
+            parameters: [ 100 ]
             delayBetweenActions: [ 10000 ]
           - name: runAwayFromSetAgent
             parameters: null
-availableItems:
+          - name: catchInfectionRandomly
+            parameters: [ 0.01 ]
+            delayBetweenActions: [ 30000 ]
+          
+itemTemplates:
   - name: Medical Supplies
-    playerCompatible: true
+    description: Used to heal infected agents
+    playerCompatible: false
     agentCompatible: true
+    numberPerSpawningLocation: 2
+    iconName: medical_supplies
     methodsToRun:
       - name: heal
         parameters: [ 100 ]

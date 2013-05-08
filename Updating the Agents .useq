@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence-diagram version="1.1.2" icons="true" automaticImage="PNG">  
+  <object id="1" language="java" name="b0538705.ncl.worldrpg.Support" project="WorldRPG" 
+    file="/WorldRPG/src/b0538705/ncl/worldrpg/Support.java" binary="false" label="support" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="292" y="0"/>    
+    <execution id="2">      
+      <position height="63" width="113" x="5" y="120"/>    
+    </execution>  
+  </object>  
+  <object id="5" language="java" name="b0538705.ncl.worldrpg.AgentsNotifier" project="WorldRPG" 
+    file="/WorldRPG/src/b0538705/ncl/worldrpg/AgentsNotifier.java" binary="false" label="agentsNotifier" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="412" y="0"/>    
+    <execution id="4">      
+      <position height="21" width="122" x="122" y="141"/>    
+    </execution>    
+    <execution id="6">      
+      <position height="232" width="122" x="122" y="187"/>    
+    </execution>  
+  </object>  
+  <object id="9" language="java" name="b0538705.ncl.worldrpg.Agent" project="WorldRPG" 
+    file="/WorldRPG/src/b0538705/ncl/worldrpg/Agent.java" binary="false" label="agent" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="356" y="0"/>    
+    <execution id="8">      
+      <position height="190" width="113" x="248" y="208"/>    
+    </execution>    
+    <execution id="14">      
+      <position height="21" width="7" x="301" y="284"/>    
+    </execution>    
+    <execution id="13">      
+      <position height="21" width="7" x="301" y="356"/>    
+    </execution>  
+  </object>  
+  <object id="15" language="java" name="b0538705.ncl.worldrpg.ActionPackage" project="WorldRPG" 
+    file="/WorldRPG/src/b0538705/ncl/worldrpg/ActionPackage.java" binary="false" label="actionPackage" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="434" y="0"/>    
+    <execution id="11">      
+      <position height="110" width="126" x="365" y="229"/>    
+    </execution>    
+    <execution id="19">      
+      <position height="21" width="7" x="425" y="276"/>    
+    </execution>  
+  </object>  
+  <object id="20" language="java" name="b0538705.ncl.worldrpg.ActionMethod" project="WorldRPG" 
+    file="/WorldRPG/src/b0538705/ncl/worldrpg/ActionMethod.java" binary="false" label="actionMethod" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="699" y="0"/>    
+    <execution id="17">      
+      <position height="68" width="120" x="495" y="250"/>    
+    </execution>  
+  </object>  
+  <message id="3" operation="run():void">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="4"/>  
+  </message>  
+  <message id="7" operation="update(java.util.Observable,java.lang.Object):void">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="8"/>  
+  </message>  
+  <message id="10" operation="ActionPackage()">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="11"/>  
+  </message>  
+  <message id="12">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="13"/>  
+  </message>  
+  <message id="16">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="17"/>  
+  </message>  
+  <message id="18" operation="ActionMethod()">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="14"/>  
+  </message>  
+  <message id="21" operation="ActionMethod()">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="19"/>  
+  </message>
+</sequence-diagram>

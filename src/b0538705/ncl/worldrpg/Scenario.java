@@ -20,6 +20,9 @@ public class Scenario  {
 	
 	public Agent agentTemplate;
 	
+	public ArrayList<WinCondition> winConditions;
+	public ArrayList<FailCondition> failConditions;
+	
 	
 	public Scenario()
 	{

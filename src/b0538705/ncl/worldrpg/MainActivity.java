@@ -196,8 +196,6 @@ public class MainActivity extends Activity {
 				MapHandler.mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 				
 				
-	
-				
 				//need a way to check whatever the game is running yet or not
 				//there is room for improvement here
 				//TODO move somewhere else
@@ -207,6 +205,8 @@ public class MainActivity extends Activity {
 					
 					
 				}
+				
+				
 				
 				Player.instance.locationUpdate(Support.locationToLatLng(location));
 				

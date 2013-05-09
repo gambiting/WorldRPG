@@ -86,7 +86,7 @@ public class MapHandler implements OnMapClickListener, OnCameraChangeListener, O
 
 			final Dialog dialog = new Dialog(Support.currentActivity);
 			dialog.setContentView(dialogView);
-			dialog.setTitle("Title...");
+			dialog.setTitle("Agent info window");
 
 			// set the custom dialog components - text, image and button
 

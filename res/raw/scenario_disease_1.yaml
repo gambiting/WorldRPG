@@ -1,10 +1,18 @@
 scenario: 1
 name    : Disease Outbreak 1
 normal  : 10
-infected: 0
+infected: 2
 panicked: 2
 spawningLocationWidth: 50
 diseaseTimeLimit: 20
+winConditions:
+  - name: winIfLessInfectedThan
+    parameters: [ 10 ]
+    description: Have less than 10 infected agents
+failConditions:
+  - name: failIfMoreInfectedThan
+    parameters: [100]
+    description: Have more than 100 infected agents
 agentTemplate:
     actionStack:
        - id: 1
@@ -16,7 +24,7 @@ agentTemplate:
             parameters: [ 30 ]
             delayBetweenActions: [ 10000 ]
           - name: catchInfectionRandomly
-            parameters: [ 0.01 ]
+            parameters: [ 0.5 ]
             delayBetweenActions: [ 30000 ]
        - id: 2
          name: infected package
@@ -24,7 +32,7 @@ agentTemplate:
           - name: moveAbout
             parameters: null
           - name: infectAllWithinRadius
-            parameters: [ 30 ]
+            parameters: [ 10 ]
             delayBetweenActions: [ 5000 ]
           - name: checkIfInfectionEnded
             parameters: null
@@ -37,7 +45,7 @@ agentTemplate:
           - name: runAwayFromSetAgent
             parameters: null
           - name: catchInfectionRandomly
-            parameters: [ 0.01 ]
+            parameters: [ 0.5 ]
             delayBetweenActions: [ 30000 ]
           
 itemTemplates:

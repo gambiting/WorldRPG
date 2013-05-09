@@ -122,4 +122,13 @@
 	    android:layout_margin="5dp"
 	    android:text="Center on Player"/>
 	</RelativeLayout>
+	
+	<b0538705.ncl.worldrpg.StatusView 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@id/status_layout"
+	    android:layout_alignParentLeft="true"
+	    android:background="#99000000" >
+    
+	</b0538705.ncl.worldrpg.StatusView>
 </RelativeLayout>

@@ -319,7 +319,9 @@ public class Agent implements Observer {
 	 */
 	public void catchInfectionRandomly( Double chance)
 	{
-		if(Math.random()< chance)
+		Integer randomValue = Support.random.nextInt(100);
+		//Log.d("worldrpg", randomValue.toString());
+		if(randomValue< chance*10)
 		{
 			infect(this);
 		}

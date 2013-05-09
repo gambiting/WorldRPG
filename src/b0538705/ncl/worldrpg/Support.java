@@ -1,7 +1,9 @@
 package b0538705.ncl.worldrpg;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -35,8 +37,15 @@ public class Support {
 
 	public static TextView debugView;
 	public static ScrollView debugScroller;
+	
+	public static SecureRandom random = new SecureRandom();
 
 	public static BlockingQueue<SpawningLocation> activeSpawningLocations = new LinkedBlockingQueue<SpawningLocation>();
+	
+	
+	public static Integer currentNoOfNormalAgents=0;
+	public static Integer currentNoOfInfectedAgents=0;
+	public static Integer currentNoOfPanickedAgents=0;
 
 
 	//update frequency in seconds
@@ -92,6 +101,21 @@ public class Support {
 
 		//load a scenario
 		Support.activeScenario = YamlHandler.loadScenario(Support.currentContext.getResources().openRawResource(R.raw.scenario_disease_1));
+		
+		
+		//start all win and fail condition checkers:
+		
+		for(WinCondition wc: Support.activeScenario.winConditions)
+		{
+			Thread winConditionThread = new Thread(wc);
+			winConditionThread.start();
+		}
+		
+		for(FailCondition fc: Support.activeScenario.failConditions)
+		{
+			Thread failConditionThread = new Thread(fc);
+			failConditionThread.start();
+		}
 	}
 
 	public static void initializeAssets()
@@ -238,4 +262,27 @@ public class Support {
 		
 		return tempAgent;
 	}
+	
+	/*
+	 * returns a current amount of agents in a given state
+	 */
+	public static Integer returnCountOfAgentsWithState(String state)
+	{
+		Integer count=0;
+		
+		for(SpawningLocation sl:Support.activeSpawningLocations)
+		{
+			for(Agent a:sl.activeAgents)
+			{
+				if(a.state.equals(state))
+				{
+					count++;
+					
+				}
+			}
+		}
+		
+		return count;
+	}
+	
 }

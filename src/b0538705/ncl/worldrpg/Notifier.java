@@ -25,6 +25,11 @@ public class Notifier extends Observable implements Runnable{
 			synchronized(this)
 			{
 
+				//update numbers
+				Support.currentNoOfNormalAgents = Support.returnCountOfAgentsWithState("normal");
+				Support.currentNoOfInfectedAgents = Support.returnCountOfAgentsWithState("infected");
+				Support.currentNoOfPanickedAgents = Support.returnCountOfAgentsWithState("panicked");
+				
 				//set the flag on this observable to changed
 				this.setChanged();
 				//notify the observers
